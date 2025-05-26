@@ -1,31 +1,56 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
+import { css } from '@emotion/css';
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <div>
-        <a href='https://vite.dev' target='_blank'>
-          <img src={viteLogo} className='logo' alt='Vite logo' />
-        </a>
-        <a href='https://react.dev' target='_blank'>
-          <img src={reactLogo} className='logo react' alt='React logo' />
-        </a>
+    <div className={containerStyle}>
+      <div className={chartAreaStyle}>
+        <div className={headerStyle}>이 곳은 헤더입니다.</div>
+        <div className={graphStyle}>이 곳에 그래프가 들어갑니다.</div>
       </div>
-      <h1>Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className='read-the-docs'>Click on the Vite and React logos to learn more</p>
-    </>
+      <div className={editorStyle}>이 곳은 차트 에디터 입니다.</div>
+    </div>
   );
 }
+
+const containerStyle = css`
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  background-color: black;
+`;
+
+const chartAreaStyle = css`
+  flex: 7;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+`;
+
+const headerStyle = css`
+  height: 50px; /* 임의값, 필요시 조정 */
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const graphStyle = css`
+  flex: 1;
+  background: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const editorStyle = css`
+  flex: 3;
+  background: #d0d0ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(80px + 100%); /* 헤더 높이 + 그래프 높이 */
+`;
 
 export default App;
