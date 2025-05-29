@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { AgCharts } from 'ag-charts-react';
 import type { AgChartOptions } from 'ag-charts-community';
+import 'ag-charts-enterprise';
 
 const generateTestData = () => {
   const data = [];
@@ -29,6 +30,7 @@ export const LineChart = () => {
         yKey: 'series1',
         yName: '시리즈 1',
         stroke: '#2196F3',
+        strokeWidth: 1,
         marker: { enabled: false },
       },
       {
@@ -37,6 +39,7 @@ export const LineChart = () => {
         yKey: 'series2',
         yName: '시리즈 2',
         stroke: '#4CAF50',
+        strokeWidth: 1,
         marker: { enabled: false },
       },
       {
@@ -45,6 +48,7 @@ export const LineChart = () => {
         yKey: 'series3',
         yName: '시리즈 3',
         stroke: '#FFC107',
+        strokeWidth: 1,
         marker: { enabled: false },
       },
     ],
@@ -70,6 +74,20 @@ export const LineChart = () => {
       right: 20,
       bottom: 20,
       left: 20,
+    },
+    tooltip: {
+      delay: 50,
+    },
+    animation: {
+      enabled: false,
+    },
+    zoom: {
+      enabled: true,
+      enableAxisDragging: false,
+      enablePanning: true,
+      enableScrolling: false,
+      enableSelecting: true,
+      panKey: 'shift',
     },
   });
   return <AgCharts options={chartOptions} style={{ width: '100%', height: '100%' }} />;
