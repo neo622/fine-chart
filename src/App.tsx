@@ -1,11 +1,14 @@
 import { css } from '@emotion/css';
+import { LineChart } from './components/LineChart';
 
 function App() {
   return (
     <div className={containerStyle}>
       <div className={chartAreaStyle}>
         <div className={headerStyle}>이 곳은 헤더입니다.</div>
-        <div className={graphStyle}>이 곳에 그래프가 들어갑니다.</div>
+        <div className={graphStyle}>
+          <LineChart />
+        </div>
       </div>
       <div className={editorStyle}>이 곳은 차트 에디터 입니다.</div>
     </div>
