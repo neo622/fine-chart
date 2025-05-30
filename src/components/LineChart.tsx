@@ -2,13 +2,12 @@ import { useState } from 'react';
 import { AgCharts } from 'ag-charts-react';
 import type { AgChartOptions } from 'ag-charts-community';
 import 'ag-charts-enterprise';
-import 'ag-charts-enterprise';
 
 const generateTestData = () => {
   const data = [];
   const now = new Date();
 
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 10000; i++) {
     const time = new Date(now.getTime() - (1000 - i) * 60000); // 1분 간격
     data.push({
       timestamp: time,
