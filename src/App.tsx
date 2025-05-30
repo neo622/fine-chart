@@ -1,13 +1,19 @@
 import { css } from '@emotion/css';
 import { LineChart } from './components/LineChart';
+import { LegendTable } from './components/LegendTable';
 
 function App() {
   return (
     <div className={containerStyle}>
       <div className={chartAreaStyle}>
         <div className={headerStyle}>이 곳은 헤더입니다.</div>
-        <div className={graphStyle}>
-          <LineChart />
+        <div className={chartContainerStyle}>
+          <div className={chartStyle}>
+            <LineChart />
+          </div>
+          <div className={legendStyle}>
+            <LegendTable />
+          </div>
         </div>
       </div>
       <div className={editorStyle}>이 곳은 차트 에디터 입니다.</div>
@@ -39,12 +45,23 @@ const headerStyle = css`
   justify-content: center;
 `;
 
-const graphStyle = css`
+const chartContainerStyle = css`
   flex: 1;
-  background: #e0e0e0;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  min-height: 0;
+`;
+
+const chartStyle = css`
+  flex: 3;
+  background: #e0e0e0;
+  min-height: 0;
+`;
+
+const legendStyle = css`
+  flex: 1;
+  background: white;
+  min-height: 0;
 `;
 
 const editorStyle = css`
