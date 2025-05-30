@@ -32,7 +32,6 @@ export const LineChart = () => {
         yName: '시리즈 1',
         stroke: '#2196F3',
         strokeWidth: 1,
-        strokeWidth: 1,
         marker: { enabled: false },
       },
       {
@@ -42,7 +41,6 @@ export const LineChart = () => {
         yName: '시리즈 2',
         stroke: '#4CAF50',
         strokeWidth: 1,
-        strokeWidth: 1,
         marker: { enabled: false },
       },
       {
@@ -51,7 +49,6 @@ export const LineChart = () => {
         yKey: 'series3',
         yName: '시리즈 3',
         stroke: '#FFC107',
-        strokeWidth: 1,
         strokeWidth: 1,
         marker: { enabled: false },
       },
