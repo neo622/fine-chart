@@ -5,28 +5,38 @@ import { Editor } from '../components/Editor';
 
 function App() {
   return (
-    <div className={containerStyle}>
-      <div className={chartAreaStyle}>
-        <div className={headerStyle}>이 곳은 헤더입니다.</div>
-        <div className={chartContainerStyle}>
-          <div className={chartStyle}>
-            <LineChart />
-          </div>
-          <div className={legendStyle}>
-            <LegendTable />
+    <div className={wrapper}>
+      <div className={containerStyle}>
+        <div className={chartAreaStyle}>
+          <div className={headerStyle}>이 곳은 헤더입니다.</div>
+          <div className={chartContainerStyle}>
+            <div className={chartStyle}>
+              <LineChart />
+            </div>
+            <div className={legendStyle}>
+              <LegendTable />
+            </div>
           </div>
         </div>
-      </div>
-      <div className={editorStyle}>
-        <Editor />
+        <div className={editorStyle}>
+          <Editor />
+        </div>
       </div>
     </div>
   );
 }
 
-const containerStyle = css`
+const wrapper = css`
   width: 100vw;
   height: 100vh;
+  background-color: #f4f5f5;
+  display: flex;
+  align-items: center;
+`;
+
+const containerStyle = css`
+  width: 100vw;
+  height: 95vh;
   display: flex;
   flex-direction: row;
   overflow: hidden;
@@ -42,7 +52,7 @@ const chartAreaStyle = css`
 
 const headerStyle = css`
   height: 50px; /* 임의값, 필요시 조정 */
-  background: #f5f5f5;
+  background: rgb(255, 255, 255);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,7 +79,7 @@ const legendStyle = css`
 
 const editorStyle = css`
   flex: 3;
-  background: #d0d0ff;
+  background: rgb(255, 255, 255);
   display: flex;
   align-items: center;
   justify-content: center;

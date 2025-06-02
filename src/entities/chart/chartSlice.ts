@@ -1,8 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import { generateTestData } from '../../shared/utils/MockData';
-import type { ChartOption } from './types';
-import type { AgChartOptions, AgCartesianSeriesOptions } from 'ag-charts-community';
+import type { AgChartOptions } from 'ag-charts-community';
 
 const initialState: AgChartOptions = {
   data: generateTestData(), // 임시
