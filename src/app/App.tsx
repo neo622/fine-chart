@@ -1,6 +1,7 @@
 import { css } from '@emotion/css';
-import { LineChart } from './components/LineChart';
-import { LegendTable } from './components/LegendTable';
+import { LineChart } from '../components/LineChart';
+import { LegendTable } from '../components/LegendTable';
+import { Editor } from '../components/Editor';
 
 function App() {
   return (
@@ -16,7 +17,9 @@ function App() {
           </div>
         </div>
       </div>
-      <div className={editorStyle}>이 곳은 차트 에디터 입니다.</div>
+      <div className={editorStyle}>
+        <Editor />
+      </div>
     </div>
   );
 }
