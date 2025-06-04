@@ -14,6 +14,17 @@ export const Editor = () => {
     border: '1px solid rgba(56, 56, 56, 0.1)',
   };
 
+  const titleStyle = {
+    margin: '0 0 16px 0',
+    width: '100%',
+    height: '50px',
+    background: '#b2cff7',
+    color: '#00006a',
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: '20px',
+  };
+
   return (
     <div
       style={{
@@ -21,39 +32,18 @@ export const Editor = () => {
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        gap: '16px',
-        padding: '0 15px',
+        gap: '15px',
+        padding: '20px 15px',
         alignItems: 'center',
-        justifyContent: 'space-between',
       }}
     >
       <div style={{ ...sectionStyle, height: '30%', marginTop: '15px' }}>
-        <h2
-          style={{
-            margin: '0 0 16px 0',
-            width: '100%',
-            height: '50px',
-            background: '#b2cff7',
-            color: '#00006a',
-          }}
-        >
-          Assign Axis
-        </h2>
+        <h2 style={titleStyle}>Assign Axis</h2>
         {/* Assign Axis 컨텐츠 */}
       </div>
       <div style={{ ...sectionStyle, height: '60%', marginBottom: '20px' }}>
-        <h2
-          style={{
-            margin: '0 0 16px 0',
-            width: '100%',
-            height: '50px',
-            background: '#b2cff7',
-            color: '#00006a',
-          }}
-        >
-          Chart Editor
-        </h2>
-        <div style={{ width: '100%', height: '100%' }} onClick={onClickEditor}>
+        <h2 style={titleStyle}>Chart Editor</h2>
+        <div style={{ width: '100%', height: '100%', padding: '20px' }} onClick={onClickEditor}>
           이 곳은 차트 에디터 입니다.
         </div>
       </div>

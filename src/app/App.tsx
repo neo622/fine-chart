@@ -2,13 +2,19 @@ import { css } from '@emotion/css';
 import { LineChart } from '../components/LineChart';
 import { LegendTable } from '../components/LegendTable';
 import { Editor } from '../components/Editor';
+import { HeaderOptions } from '../components/HeaderOptions';
+import { useAppSelector } from './hooks';
 
 function App() {
+  const isEditorVisible = useAppSelector((state) => state.ui.isEditorVisible);
+
   return (
     <div className={wrapper}>
       <div className={containerStyle}>
         <div className={chartAreaStyle}>
-          <div className={headerStyle}>이 곳은 헤더입니다.</div>
+          <div className={headerStyle}>
+            <HeaderOptions />
+          </div>
           <div className={chartContainerStyle}>
             <div className={chartStyle}>
               <LineChart />
@@ -18,9 +24,11 @@ function App() {
             </div>
           </div>
         </div>
-        <div className={editorStyle}>
-          <Editor />
-        </div>
+        {isEditorVisible && (
+          <div className={editorStyle}>
+            <Editor />
+          </div>
+        )}
       </div>
     </div>
   );

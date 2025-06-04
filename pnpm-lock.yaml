@@ -26,6 +26,9 @@ importers:
       ag-charts-react:
         specifier: ^11.3.0
         version: 11.3.0(react@19.1.0)
+      immer:
+        specifier: ^10.1.1
+        version: 10.1.1
       react:
         specifier: ^19.1.0
         version: 19.1.0
