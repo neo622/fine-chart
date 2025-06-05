@@ -24,11 +24,14 @@ function App() {
             </div>
           </div>
         </div>
-        {isEditorVisible && (
+        {/* {isEditorVisible && (
           <div className={editorStyle}>
             <Editor />
           </div>
-        )}
+        )} */}
+        <div className={isEditorVisible ? editorStyle : hideEditorStyle}>
+          <Editor />
+        </div>
       </div>
     </div>
   );
@@ -92,6 +95,10 @@ const editorStyle = css`
   align-items: center;
   justify-content: center;
   height: calc(80px + 100%); /* 헤더 높이 + 그래프 높이 */
+`;
+
+const hideEditorStyle = css`
+  display: none;
 `;
 
 export default App;

@@ -1,9 +1,29 @@
-import { useSeriesActions } from '../entities/chart/chartHooks';
+// import { useSeriesActions } from '../entities/chart/chartHooks';
+import { useState } from 'react';
 import { AssignAxis } from '../features/assign-axis/AssignAxis';
+import { AxisEditor } from '../features/axis-editor/AxisEditor';
+
+type TabType = 'axis' | 'legend' | 'series';
+
 export const Editor = () => {
-  const { updateStrokeWidth } = useSeriesActions();
-  const onClickEditor = () => {
-    updateStrokeWidth(1, 10);
+  // const { updateStrokeWidth } = useSeriesActions();
+  // const onClickEditor = () => {
+  //   updateStrokeWidth(1, 10);
+  // }
+
+  const [activeTab, setActiveTab] = useState<TabType>('axis');
+
+  const renderEditor = () => {
+    switch (activeTab) {
+      case 'axis':
+        return <AxisEditor />;
+      case 'legend':
+        return <div style={placeholderStyle}>준비중입니다.</div>;
+      case 'series':
+        return <div style={placeholderStyle}>준비중입니다.</div>;
+      default:
+        return null;
+    }
   };
 
   return (
@@ -26,8 +46,37 @@ export const Editor = () => {
       </div>
       <div style={{ ...sectionStyle, height: '60%', marginBottom: '20px' }}>
         <h2 style={titleStyle}>Chart Editor</h2>
-        <div style={{ width: '100%', height: '100%', padding: '20px' }} onClick={onClickEditor}>
-          이 곳은 차트 에디터 입니다.
+        <div style={{ width: '100%', height: '100%', padding: '20px' }}>
+          <div style={tabContainerStyle}>
+            <button
+              style={{
+                ...tabButtonStyle,
+                backgroundColor: activeTab === 'axis' ? '#e3f2fd' : '#f5f5f5',
+              }}
+              onClick={() => setActiveTab('axis')}
+            >
+              Axis
+            </button>
+            <button
+              style={{
+                ...tabButtonStyle,
+                backgroundColor: activeTab === 'legend' ? '#e3f2fd' : '#f5f5f5',
+              }}
+              onClick={() => setActiveTab('legend')}
+            >
+              Legend
+            </button>
+            <button
+              style={{
+                ...tabButtonStyle,
+                backgroundColor: activeTab === 'series' ? '#e3f2fd' : '#f5f5f5',
+              }}
+              onClick={() => setActiveTab('series')}
+            >
+              Series
+            </button>
+          </div>
+          <div style={editorContainerStyle}>{renderEditor()}</div>
         </div>
       </div>
     </div>
@@ -51,4 +100,36 @@ const titleStyle = {
   display: 'flex',
   alignItems: 'center',
   paddingLeft: '20px',
+};
+
+const tabContainerStyle = {
+  display: 'flex',
+  gap: '10px',
+  marginBottom: '20px',
+};
+
+const tabButtonStyle = {
+  padding: '8px 16px',
+  border: 'none',
+  borderRadius: '4px',
+  color: '#1976d2',
+  cursor: 'pointer',
+  fontSize: '14px',
+  fontWeight: '500',
+};
+
+const editorContainerStyle = {
+  width: '80%',
+  height: 'calc(80% - 60px)',
+  backgroundColor: 'white',
+};
+
+const placeholderStyle = {
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  color: '#666',
+  fontSize: '16px',
 };
