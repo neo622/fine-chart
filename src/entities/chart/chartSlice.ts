@@ -48,6 +48,12 @@ const initialState: AgChartOptions = {
     {
       type: 'number',
       position: 'left',
+      keys: ['series1', 'series2', 'series3'],
+    },
+    {
+      type: 'number',
+      position: 'right',
+      keys: [],
     },
   ],
   legend: {

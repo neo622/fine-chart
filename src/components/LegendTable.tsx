@@ -50,14 +50,14 @@ const tableStyle = css`
   border-collapse: collapse;
 `;
 
-const thStyle = css`
-  padding: 8px;
-  text-align: left;
-  border-bottom: 2px solid #e0e0e0;
-  background: #f5f5f5;
-  position: sticky;
-  top: 0;
-`;
+// const thStyle = css`
+//   padding: 8px;
+//   text-align: left;
+//   border-bottom: 2px solid #e0e0e0;
+//   background: #f5f5f5;
+//   position: sticky;
+//   top: 0;
+// `;
 
 const tdStyle = css`
   padding: 8px;

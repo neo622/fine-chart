@@ -11,6 +11,7 @@ export const generateTestData = () => {
       series3: Math.random() * 200 + 100,
     });
   }
-
+  console.log(data);
+  const series = Object.keys(data[0]).filter((item) => item !== 'timeStamp');
   return data;
 };

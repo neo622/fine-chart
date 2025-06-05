@@ -1,5 +1,5 @@
 import { useSeriesActions } from '../entities/chart/chartHooks';
-
+import { AssignAxis } from '../features/assign-axis/AssignAxis';
 export const Editor = () => {
   const { updateStrokeWidth } = useSeriesActions();
   const onClickEditor = () => {
@@ -39,7 +39,9 @@ export const Editor = () => {
     >
       <div style={{ ...sectionStyle, height: '30%', marginTop: '15px' }}>
         <h2 style={titleStyle}>Assign Axis</h2>
-        {/* Assign Axis 컨텐츠 */}
+        <div style={{ padding: '20px', height: 'calc(100% - 90px)' }}>
+          <AssignAxis />
+        </div>
       </div>
       <div style={{ ...sectionStyle, height: '60%', marginBottom: '20px' }}>
         <h2 style={titleStyle}>Chart Editor</h2>
