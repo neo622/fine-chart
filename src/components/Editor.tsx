@@ -6,25 +6,6 @@ export const Editor = () => {
     updateStrokeWidth(1, 10);
   };
 
-  const sectionStyle = {
-    width: '100%',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-    backgroundColor: 'white',
-    border: '1px solid rgba(56, 56, 56, 0.1)',
-  };
-
-  const titleStyle = {
-    margin: '0 0 16px 0',
-    width: '100%',
-    height: '50px',
-    background: '#b2cff7',
-    color: '#00006a',
-    display: 'flex',
-    alignItems: 'center',
-    paddingLeft: '20px',
-  };
-
   return (
     <div
       style={{
@@ -51,4 +32,23 @@ export const Editor = () => {
       </div>
     </div>
   );
+};
+
+const sectionStyle = {
+  width: '100%',
+  borderRadius: '8px',
+  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+  backgroundColor: 'white',
+  border: '1px solid rgba(56, 56, 56, 0.1)',
+};
+
+const titleStyle = {
+  margin: '0 0 16px 0',
+  width: '100%',
+  height: '50px',
+  background: '#b2cff7',
+  color: '#00006a',
+  display: 'flex',
+  alignItems: 'center',
+  paddingLeft: '20px',
 };

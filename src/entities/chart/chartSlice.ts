@@ -1,9 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import { generateTestData } from '../../shared/utils/MockData';
 import type { AgChartOptions } from 'ag-charts-community';
-
-import { updateSeriesReducer } from './reducers/updateSeriesReducers';
 
 const initialState: AgChartOptions = {
   data: generateTestData(), // 임시
@@ -87,10 +85,28 @@ const chartSlice = createSlice({
   name: 'chart',
   initialState,
   reducers: {
-    updateAxis() {},
-    updateSeries: updateSeriesReducer,
+    updateAxis: (state, action: PayloadAction<any>) => {
+      state.axes = action.payload;
+    },
+    updateSeries: (
+      state,
+      //AgChartOptions['series'][number] number에서 타입에러가 죽어라고 뜨는데 임시로 무시
+      action: PayloadAction<{
+        index: number;
+        //@ts-ignore
+        newSeries: Partial<AgChartOptions['series'][number]>;
+      }>,
+    ) => {
+      const { index, newSeries } = action.payload;
+      if (state.series && state.series[index]) {
+        state.series[index] = {
+          ...state.series[index],
+          ...newSeries,
+        };
+      }
+    },
   },
 });
 
-export const { updateSeries } = chartSlice.actions;
+export const { updateSeries, updateAxis } = chartSlice.actions;
 export default chartSlice.reducer;
