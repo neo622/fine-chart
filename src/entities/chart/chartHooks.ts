@@ -101,26 +101,46 @@ export const useAxisActions = () => {
 export const useSeriesShift = () => {
   const dispatch = useAppDispatch();
   const chartData = useAppSelector((state) => state.chart.data) || [];
-  const [deletedValues, setDeletedValues] = useState<{ [key: string]: any[] }>({});
+  const [deletedValues, setDeletedValues] = useState<{ [key: string]: any }>({});
 
   const moveDataRight = (selectedSeries: string[]) => {
-    const newData = chartData.map((item) => ({ ...item }));
+    const newData = chartData.map((item) => ({ ...item })); // 재할당이 안되어서 깊은 복사 수행
     const newDeletedValues = { ...deletedValues };
 
     selectedSeries.forEach((series) => {
       // 맨 뒤의 값을 저장
       const lastValue = newData[newData.length - 1][series];
       if (!newDeletedValues[series]) {
-        newDeletedValues[series] = [];
+        newDeletedValues[series] = { right: [], left: [] };
       }
-      newDeletedValues[series].push(lastValue);
+      console.log(newDeletedValues);
 
-      // 데이터 이동
-      for (let i = newData.length - 1; i > 0; i--) {
-        newData[i] = { ...newData[i], [series]: newData[i - 1][series] };
+      if (newDeletedValues[series].left.length > 0) {
+        // 데이터 이동
+        for (let i = newData.length - 1; i > 0; i--) {
+          newData[i] = { ...newData[i], [series]: newData[i - 1][series] };
+        }
+
+        // 맨 앞에 null 삽입 대신에 left 기록의 맨 마지막 값을 삽입
+        newData[0] = {
+          ...newData[0],
+          [series]: newDeletedValues[series].left[newDeletedValues[series].left.length - 1],
+        };
+
+        // left 기록의 맨 마지막 값을 삽입한 후에 해당 값은 제거
+        newDeletedValues[series].left.pop();
+      } else {
+        // 데이터 이동
+        for (let i = newData.length - 1; i > 0; i--) {
+          newData[i] = { ...newData[i], [series]: newData[i - 1][series] };
+        }
+
+        // 이동하면서 삭제된 데이터를 저장
+        newDeletedValues[series].right.push(lastValue);
+
+        // 맨 앞에 null 삽입
+        newData[0] = { ...newData[0], [series]: null };
       }
-      // 맨 앞에 null 삽입
-      newData[0] = { ...newData[0], [series]: null };
     });
 
     setDeletedValues(newDeletedValues);
@@ -135,22 +155,45 @@ export const useSeriesShift = () => {
       // 맨 앞의 값을 저장
       const firstValue = newData[0][series];
       if (!newDeletedValues[series]) {
-        newDeletedValues[series] = [];
+        newDeletedValues[series] = { right: [], left: [] };
       }
-      newDeletedValues[series].unshift(firstValue);
 
-      // 데이터 이동
-      for (let i = 0; i < newData.length - 1; i++) {
-        newData[i] = { ...newData[i], [series]: newData[i + 1][series] };
+      // 반대 이동 기록이 있을 때
+      if (newDeletedValues[series].right.length > 0) {
+        // 데이터 이동
+        for (let i = 0; i < newData.length - 1; i++) {
+          newData[i] = { ...newData[i], [series]: newData[i + 1][series] };
+        }
+
+        // 맨 뒤에 null 대신에 right 기록의 맨 마지막 값을 삽입
+        newData[newData.length - 1] = {
+          ...newData[newData.length - 1],
+          [series]: newDeletedValues[series].right[newDeletedValues[series].right.length - 1],
+        };
+
+        // right 기록의 맨 마지막 값을 삽입한 후에 해당 값은 제거
+        newDeletedValues[series].right.pop();
       }
-      // 맨 뒤에 null 삽입
-      newData[newData.length - 1] = { ...newData[newData.length - 1], [series]: null };
+      // 반대 이동 기록이 없을 떄 (원점일 때)
+      else {
+        // 데이터 이동
+        for (let i = 0; i < newData.length - 1; i++) {
+          newData[i] = { ...newData[i], [series]: newData[i + 1][series] };
+        }
+        // 이동하면서 삭제된 데이터를 저장
+        newDeletedValues[series].left.push(firstValue);
+        // 맨 뒤에 null 삽입
+        newData[newData.length - 1] = {
+          ...newData[newData.length - 1],
+          [series]: null,
+        };
+      }
     });
 
     setDeletedValues(newDeletedValues);
     dispatch(updateData(newData));
   };
-
+  console.log(deletedValues);
   const resetData = (selectedSeries: string[]) => {
     const newData = [...chartData];
     const newDeletedValues = { ...deletedValues };
