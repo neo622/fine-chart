@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { toggleEditor } from '../entities/ui/uiSlice';
+import { toggleEditor, toggleSeriesShift } from '../entities/ui/uiSlice';
 import editIcon from '../assets/icons/edit.png';
 import shiftIcon from '../assets/icons/shift.png';
 import rulerIcon from '../assets/icons/ruler.png';
@@ -40,6 +40,7 @@ const IconButton = ({ icon, isActive, onClick }: ButtonProps) => {
 export const HeaderOptions = () => {
   const dispatch = useAppDispatch();
   const isEditorVisible = useAppSelector((state) => state.ui.isEditorVisible);
+  const isSeriesShiftVisible = useAppSelector((state) => state.ui.isSeriesShiftVisible);
   const [waferInfo, setWaferInfo] = useState(false);
   const [stepInfo, setStepInfo] = useState(false);
 
@@ -50,7 +51,12 @@ export const HeaderOptions = () => {
       onClick: () => dispatch(toggleEditor()),
       isActive: isEditorVisible,
     },
-    { id: 'shift', icon: shiftIcon, onClick: () => {}, isActive: false },
+    {
+      id: 'shift',
+      icon: shiftIcon,
+      onClick: () => dispatch(toggleSeriesShift()),
+      isActive: isSeriesShiftVisible,
+    },
     { id: 'ruler', icon: rulerIcon, onClick: () => {}, isActive: false },
     { id: 'download', icon: downloadIcon, onClick: () => {}, isActive: false },
     { id: 'capture', icon: captureIcon, onClick: () => {}, isActive: false },

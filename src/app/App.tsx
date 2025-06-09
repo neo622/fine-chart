@@ -8,6 +8,7 @@ import { useAppSelector } from './hooks';
 
 function App() {
   const isEditorVisible = useAppSelector((state) => state.ui.isEditorVisible);
+  const isSeriesShiftVisible = useAppSelector((state) => state.ui.isSeriesShiftVisible);
 
   return (
     <div className={wrapper}>
@@ -25,14 +26,9 @@ function App() {
             </div>
           </div>
         </div>
-        {/* {isEditorVisible && (
-          <div className={editorStyle}>
-            <Editor />
-          </div>
-        )} */}
-        <div className={isEditorVisible ? editorStyle : hideEditorStyle}>
-          {/* <Editor /> */}
-          <SeriesShift />
+        <div className={isEditorVisible || isSeriesShiftVisible ? editorStyle : hideEditorStyle}>
+          {isEditorVisible && <Editor />}
+          {isSeriesShiftVisible && <SeriesShift />}
         </div>
       </div>
     </div>
