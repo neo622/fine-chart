@@ -1,14 +1,15 @@
-import { useState } from 'react';
-import { useAxisActions } from '../../entities/chart/chartHooks';
+import { useState, useEffect, useRef } from 'react';
+import { useAxesOptions, useAxisActions } from '../../entities/chart/chartHooks';
+import { ChromePicker } from 'react-color';
 
 interface ScaleType {
   isAutomation: boolean;
-  min: number | string;
-  max: number | string;
-  interval: number | string;
-  fontSize: number | string;
-  fontColor: string;
-  gridColor: string;
+  min: number | string | undefined;
+  max: number | string | undefined;
+  interval: number | string | undefined;
+  fontSize: number | string | undefined;
+  fontColor: string | undefined;
+  gridColor: string | undefined;
 }
 
 export interface AxisConfig {
@@ -16,30 +17,62 @@ export interface AxisConfig {
 }
 
 export const AxisEditor = () => {
+  const currentAxesOption = useAxesOptions();
   const { changeAxesConfig } = useAxisActions();
+  const fontColorPickerRef = useRef<HTMLDivElement>(null);
+  const gridColorPickerRef = useRef<HTMLDivElement>(null);
+  // TODO: min, max 관련 내용은 agchartaxisnumberoption을 사용해야 해서 추후에 맞추기
+  const leftAxesOption: any = currentAxesOption?.filter((item) => item.position === 'left')[0];
+  const rightAxesOption: any = currentAxesOption?.filter((item) => item.position === 'right')[0];
 
   const [axisConfig, setAxisConfig] = useState<AxisConfig>({
     left: {
       isAutomation: true,
-      min: '',
-      max: '',
+      min: leftAxesOption?.min ?? '',
+      max: leftAxesOption?.max ?? '',
       interval: '',
-      fontSize: '',
+      fontSize: leftAxesOption?.label.fontSize ?? '',
       fontColor: '#000000',
       gridColor: '#e0e0e0',
     },
     right: {
       isAutomation: true,
-      min: '',
-      max: '',
+      min: rightAxesOption?.min ?? '',
+      max: rightAxesOption?.max ?? '',
       interval: '',
-      fontSize: '',
+      fontSize: rightAxesOption?.label.fontSize ?? '',
       fontColor: '#000000',
       gridColor: '#e0e0e0',
     },
   });
 
   const [selectedAxis, setSelectedAxis] = useState<'left' | 'right'>('left');
+  const [showFontColorPicker, setShowFontColorPicker] = useState(false);
+  const [showGridColorPicker, setShowGridColorPicker] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        fontColorPickerRef.current &&
+        !fontColorPickerRef.current.contains(event.target as Node) &&
+        showFontColorPicker
+      ) {
+        setShowFontColorPicker(false);
+      }
+      if (
+        gridColorPickerRef.current &&
+        !gridColorPickerRef.current.contains(event.target as Node) &&
+        showGridColorPicker
+      ) {
+        setShowGridColorPicker(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFontColorPicker, showGridColorPicker]);
 
   const handleConfigChange = (
     axis: 'left' | 'right',
@@ -73,6 +106,7 @@ export const AxisEditor = () => {
   return (
     <div style={containerStyle}>
       <div style={axisBoxStyle}>
+        <button onClick={() => console.log(leftAxesOption, rightAxesOption)}>console axes</button>
         <div style={boxTitleStyle}>Axis</div>
         <div style={checkboxContainerStyle}>
           <label style={checkboxStyle}>
@@ -163,6 +197,62 @@ export const AxisEditor = () => {
         </div>
         <div style={styleBoxStyle}>
           <div style={boxTitleStyle}>Style</div>
+          <div style={scaleContentStyle}>
+            <div style={scaleRowStyle}>
+              <div style={scaleLabelStyle}>Font Size</div>
+              <input
+                type='number'
+                style={numberInputStyle}
+                value={axisConfig[selectedAxis].fontSize}
+                onChange={(e) =>
+                  handleConfigChange(selectedAxis, 'fontSize', Number(e.target.value))
+                }
+                onBlur={handleBlurChange}
+              />
+            </div>
+            <div style={scaleRowStyle}>
+              <div style={scaleLabelStyle}>Font Color</div>
+              <div style={colorPickerContainerStyle}>
+                <div
+                  style={{
+                    ...colorPreviewStyle,
+                    backgroundColor: axisConfig[selectedAxis].fontColor,
+                  }}
+                  onClick={() => setShowFontColorPicker(!showFontColorPicker)}
+                />
+                {showFontColorPicker && (
+                  <div style={colorPickerStyle} ref={fontColorPickerRef}>
+                    <ChromePicker
+                      color={axisConfig[selectedAxis].fontColor}
+                      onChange={(color) => handleConfigChange(selectedAxis, 'fontColor', color.hex)}
+                      onChangeComplete={handleBlurChange}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div style={scaleRowStyle}>
+              <div style={scaleLabelStyle}>Grid Color</div>
+              <div style={colorPickerContainerStyle}>
+                <div
+                  style={{
+                    ...colorPreviewStyle,
+                    backgroundColor: axisConfig[selectedAxis].gridColor,
+                  }}
+                  onClick={() => setShowGridColorPicker(!showGridColorPicker)}
+                />
+                {showGridColorPicker && (
+                  <div style={colorPickerStyle} ref={gridColorPickerRef}>
+                    <ChromePicker
+                      color={axisConfig[selectedAxis].gridColor}
+                      onChange={(color) => handleConfigChange(selectedAxis, 'gridColor', color.hex)}
+                      onChangeComplete={handleBlurChange}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -277,4 +367,23 @@ const toggleStyle = {
   width: '40px',
   height: '20px',
   cursor: 'pointer',
+};
+
+const colorPickerContainerStyle = {
+  position: 'relative' as const,
+};
+
+const colorPreviewStyle = {
+  width: '30px',
+  height: '30px',
+  border: '1px solid #e0e0e0',
+  borderRadius: '4px',
+  cursor: 'pointer',
+};
+
+const colorPickerStyle = {
+  position: 'absolute' as const,
+  zIndex: 2,
+  top: '40px',
+  left: '0',
 };

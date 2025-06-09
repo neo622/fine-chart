@@ -30,7 +30,7 @@ export const useSeriesActions = () => {
 export const useAxisActions = () => {
   const dispatch = useAppDispatch();
   const axes = useAppSelector((state) => state.chart.axes);
-
+  // 이중 Y축 설정 기능
   const setSecondaryAxis = (yKey: string, target: 'left' | 'right') => {
     const newAxes: any = axes?.map((axis) => {
       if (!('keys' in axis)) return axis;
@@ -51,7 +51,7 @@ export const useAxisActions = () => {
 
     dispatch(updateAxis(newAxes));
   };
-
+  // Y축 설정 변경 기능
   const changeAxesConfig = (newConfig: AxisConfig) => {
     const updatedAxes = axes?.map((axis) => {
       if (!('position' in axis)) return axis;
