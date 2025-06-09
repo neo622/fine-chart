@@ -2,10 +2,15 @@
 import type { AgChartOptions } from 'ag-charts-community';
 import type { AxisConfig } from '../../features/axis-editor/AxisEditor';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { updateSeries, updateAxis } from './chartSlice';
+import { updateSeries, updateAxis, updateData } from './chartSlice';
+import { useState } from 'react';
+import { generateNewTestData } from '../../shared/utils/MockData';
 
-// 차트 옵션 조회
+// 차트 전체 옵션 조회
 export const useChartOptions = () => useAppSelector((state) => state.chart);
+
+// 차트 데이터 조회
+export const useChartData = () => useAppSelector((state) => state.chart.data);
 
 // Series 정보 조회
 export const useSeriesOptions = () =>
@@ -48,7 +53,6 @@ export const useAxisActions = () => {
         keys: filteredKeys,
       };
     });
-
     dispatch(updateAxis(newAxes));
   };
   // Y축 설정 변경 기능
@@ -85,12 +89,92 @@ export const useAxisActions = () => {
 
       return updatedAxis;
     });
-
     dispatch(updateAxis(updatedAxes));
   };
 
   return {
     setSecondaryAxis,
     changeAxesConfig,
+  };
+};
+
+export const useSeriesShift = () => {
+  const dispatch = useAppDispatch();
+  const chartData = useAppSelector((state) => state.chart.data) || [];
+  const [deletedValues, setDeletedValues] = useState<{ [key: string]: any[] }>({});
+
+  const moveDataRight = (selectedSeries: string[]) => {
+    const newData = chartData.map((item) => ({ ...item }));
+    const newDeletedValues = { ...deletedValues };
+
+    selectedSeries.forEach((series) => {
+      // 맨 뒤의 값을 저장
+      const lastValue = newData[newData.length - 1][series];
+      if (!newDeletedValues[series]) {
+        newDeletedValues[series] = [];
+      }
+      newDeletedValues[series].push(lastValue);
+
+      // 데이터 이동
+      for (let i = newData.length - 1; i > 0; i--) {
+        newData[i] = { ...newData[i], [series]: newData[i - 1][series] };
+      }
+      // 맨 앞에 null 삽입
+      newData[0] = { ...newData[0], [series]: null };
+    });
+
+    setDeletedValues(newDeletedValues);
+    dispatch(updateData(newData));
+  };
+
+  const moveDataLeft = (selectedSeries: string[]) => {
+    const newData = chartData.map((item) => ({ ...item }));
+    const newDeletedValues = { ...deletedValues };
+
+    selectedSeries.forEach((series) => {
+      // 맨 앞의 값을 저장
+      const firstValue = newData[0][series];
+      if (!newDeletedValues[series]) {
+        newDeletedValues[series] = [];
+      }
+      newDeletedValues[series].unshift(firstValue);
+
+      // 데이터 이동
+      for (let i = 0; i < newData.length - 1; i++) {
+        newData[i] = { ...newData[i], [series]: newData[i + 1][series] };
+      }
+      // 맨 뒤에 null 삽입
+      newData[newData.length - 1] = { ...newData[newData.length - 1], [series]: null };
+    });
+
+    setDeletedValues(newDeletedValues);
+    dispatch(updateData(newData));
+  };
+
+  const resetData = (selectedSeries: string[]) => {
+    const newData = [...chartData];
+    const newDeletedValues = { ...deletedValues };
+
+    selectedSeries.forEach((series) => {
+      if (newDeletedValues[series]) {
+        // 저장된 값들을 원래 위치로 복원
+        const restoredValues = newDeletedValues[series];
+        for (let i = 0; i < restoredValues.length; i++) {
+          if (newData[i][series] === null) {
+            newData[i][series] = restoredValues[i];
+          }
+        }
+        newDeletedValues[series] = [];
+      }
+    });
+
+    setDeletedValues(newDeletedValues);
+    dispatch(updateData(newData));
+  };
+
+  return {
+    moveDataLeft,
+    moveDataRight,
+    resetData,
   };
 };

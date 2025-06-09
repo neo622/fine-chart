@@ -113,8 +113,11 @@ const chartSlice = createSlice({
         };
       }
     },
+    updateData: (state, action: PayloadAction<any>) => {
+      state.data = action.payload;
+    },
   },
 });
 
-export const { updateSeries, updateAxis } = chartSlice.actions;
+export const { updateSeries, updateAxis, updateData } = chartSlice.actions;
 export default chartSlice.reducer;

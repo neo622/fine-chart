@@ -2,6 +2,7 @@ import { css } from '@emotion/css';
 import { LineChart } from '../components/LineChart';
 import { LegendTable } from '../components/LegendTable';
 import { Editor } from '../components/Editor';
+import { SeriesShift } from '../features/series-shift/SeriesShift';
 import { HeaderOptions } from '../components/HeaderOptions';
 import { useAppSelector } from './hooks';
 
@@ -30,7 +31,8 @@ function App() {
           </div>
         )} */}
         <div className={isEditorVisible ? editorStyle : hideEditorStyle}>
-          <Editor />
+          {/* <Editor /> */}
+          <SeriesShift />
         </div>
       </div>
     </div>
