@@ -3,7 +3,6 @@ import type { AgChartOptions } from 'ag-charts-community';
 import type { AxisConfig } from '../../features/axis-editor/AxisEditor';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { updateSeries, updateAxis, updateData, updateDeletedValue } from './chartSlice';
-import { useState } from 'react';
 
 // 차트 전체 옵션 조회
 export const useChartOptions = () => useAppSelector((state) => state.chart.chartOptions);
@@ -26,8 +25,16 @@ export const useSeriesActions = () => {
     dispatch(updateSeries({ index, newSeries: { strokeWidth: width } }));
   };
 
+  const updateSeriesStyle = (
+    index: number,
+    newSeries: { stroke?: string; strokeWidth?: number },
+  ) => {
+    dispatch(updateSeries({ index, newSeries }));
+  };
+
   return {
     updateStrokeWidth,
+    updateSeriesStyle,
   };
 };
 

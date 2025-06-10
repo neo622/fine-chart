@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { AssignAxis } from '../features/assign-axis/AssignAxis';
 import { AxisEditor } from '../features/axis-editor/AxisEditor';
+import { SeriesEditor } from '../features/series-editor/SeriesEditor';
 
 type TabType = 'axis' | 'legend' | 'series';
 
@@ -20,7 +21,7 @@ export const Editor = () => {
       case 'legend':
         return <div style={placeholderStyle}>준비중입니다.</div>;
       case 'series':
-        return <div style={placeholderStyle}>준비중입니다.</div>;
+        return <SeriesEditor />;
       default:
         return null;
     }
