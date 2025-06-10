@@ -1,10 +1,9 @@
-import { useChartData, useSeriesOptions } from '../../entities/chart/chartHooks';
+import { useSeriesOptions } from '../../entities/chart/chartHooks';
 import { useSeriesShift } from '../../entities/chart/chartHooks';
 import { useState } from 'react';
 
 export const SeriesShift = () => {
   const series = useSeriesOptions();
-  const chartData = useChartData();
   const { moveDataLeft, moveDataRight, resetData } = useSeriesShift();
   const [selectedSeries, setSelectedSeries] = useState<string | null>(null);
 
@@ -63,11 +62,7 @@ export const SeriesShift = () => {
                 >
                   Move Right
                 </button>
-                <button
-                  style={buttonStyle}
-                  onClick={() => selectedSeries && resetData([selectedSeries])}
-                  disabled={!selectedSeries}
-                >
+                <button style={buttonStyle} onClick={() => resetData()} disabled={!selectedSeries}>
                   Reset
                 </button>
               </div>

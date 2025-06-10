@@ -2,22 +2,21 @@
 import type { AgChartOptions } from 'ag-charts-community';
 import type { AxisConfig } from '../../features/axis-editor/AxisEditor';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { updateSeries, updateAxis, updateData } from './chartSlice';
+import { updateSeries, updateAxis, updateData, updateDeletedValue } from './chartSlice';
 import { useState } from 'react';
-import { generateNewTestData } from '../../shared/utils/MockData';
 
 // 차트 전체 옵션 조회
-export const useChartOptions = () => useAppSelector((state) => state.chart);
+export const useChartOptions = () => useAppSelector((state) => state.chart.chartOptions);
 
 // 차트 데이터 조회
-export const useChartData = () => useAppSelector((state) => state.chart.data);
+export const useChartData = () => useAppSelector((state) => state.chart.chartOptions.data);
 
 // Series 정보 조회
 export const useSeriesOptions = () =>
-  useAppSelector((state) => state.chart.series) as AgChartOptions['series'];
+  useAppSelector((state) => state.chart.chartOptions.series) as AgChartOptions['series'];
 
 // Axes 정보 조회
-export const useAxesOptions = () => useAppSelector((state) => state.chart.axes);
+export const useAxesOptions = () => useAppSelector((state) => state.chart.chartOptions.axes);
 
 // Series Update 액션
 export const useSeriesActions = () => {
@@ -34,7 +33,7 @@ export const useSeriesActions = () => {
 
 export const useAxisActions = () => {
   const dispatch = useAppDispatch();
-  const axes = useAppSelector((state) => state.chart.axes);
+  const axes = useAppSelector((state) => state.chart.chartOptions.axes);
   // 이중 Y축 설정 기능
   const setSecondaryAxis = (yKey: string, target: 'left' | 'right') => {
     const newAxes: any = axes?.map((axis) => {
@@ -100,12 +99,15 @@ export const useAxisActions = () => {
 
 export const useSeriesShift = () => {
   const dispatch = useAppDispatch();
-  const chartData = useAppSelector((state) => state.chart.data) || [];
-  const [deletedValues, setDeletedValues] = useState<{ [key: string]: any }>({});
+  const chartData = useAppSelector((state) => state.chart.chartOptions.data) || [];
+  // const [deletedValues, setDeletedValues] = useState<{ [key: string]: any }>({});
+  const deletedValues = useAppSelector((state) => state.chart.deletedValue);
+  const originData = useAppSelector((state) => state.chart.originData);
 
   const moveDataRight = (selectedSeries: string[]) => {
     const newData = chartData.map((item) => ({ ...item })); // 재할당이 안되어서 깊은 복사 수행
-    const newDeletedValues = { ...deletedValues };
+    // const newDeletedValues = { ...deletedValues };
+    const newDeletedValues = JSON.parse(JSON.stringify(deletedValues));
 
     selectedSeries.forEach((series) => {
       // 맨 뒤의 값을 저장
@@ -143,13 +145,15 @@ export const useSeriesShift = () => {
       }
     });
 
-    setDeletedValues(newDeletedValues);
+    // setDeletedValues(newDeletedValues);
+    dispatch(updateDeletedValue(newDeletedValues));
     dispatch(updateData(newData));
   };
 
   const moveDataLeft = (selectedSeries: string[]) => {
     const newData = chartData.map((item) => ({ ...item }));
-    const newDeletedValues = { ...deletedValues };
+    // const newDeletedValues = { ...deletedValues };
+    const newDeletedValues = JSON.parse(JSON.stringify(deletedValues));
 
     selectedSeries.forEach((series) => {
       // 맨 앞의 값을 저장
@@ -190,29 +194,12 @@ export const useSeriesShift = () => {
       }
     });
 
-    setDeletedValues(newDeletedValues);
+    // setDeletedValues(newDeletedValues);
+    dispatch(updateDeletedValue(newDeletedValues));
     dispatch(updateData(newData));
   };
-  console.log(deletedValues);
-  const resetData = (selectedSeries: string[]) => {
-    const newData = [...chartData];
-    const newDeletedValues = { ...deletedValues };
-
-    selectedSeries.forEach((series) => {
-      if (newDeletedValues[series]) {
-        // 저장된 값들을 원래 위치로 복원
-        const restoredValues = newDeletedValues[series];
-        for (let i = 0; i < restoredValues.length; i++) {
-          if (newData[i][series] === null) {
-            newData[i][series] = restoredValues[i];
-          }
-        }
-        newDeletedValues[series] = [];
-      }
-    });
-
-    setDeletedValues(newDeletedValues);
-    dispatch(updateData(newData));
+  const resetData = () => {
+    dispatch(updateData(originData));
   };
 
   return {
