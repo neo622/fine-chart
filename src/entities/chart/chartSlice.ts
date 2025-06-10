@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import { generateTestData } from '../../shared/utils/MockData';
-import type { AgCartesianChartOptions, AgChartOptions } from 'ag-charts-community';
+import type { AgCartesianChartOptions, AgChartOptions } from 'ag-charts-enterprise';
 
 interface ChartState {
   chartOptions: AgCartesianChartOptions;
@@ -72,8 +72,8 @@ const initialState: ChartState = {
       },
     ],
     legend: {
-      enabled: true,
-      position: 'bottom',
+      enabled: false,
+      // position: 'bottom',
     },
     padding: {
       top: 20,
@@ -95,6 +95,16 @@ const initialState: ChartState = {
       enableSelecting: true,
       panKey: 'shift',
       axes: 'xy',
+    },
+    annotations: {
+      enabled: true,
+      axesButtons: {
+        axes: 'xy',
+        enabled: false,
+      },
+      toolbar: {
+        buttons: [],
+      },
     },
   },
   deletedValue: {},
@@ -131,8 +141,35 @@ const chartSlice = createSlice({
     updateDeletedValue: (state, action: PayloadAction<ChartState['deletedValue']>) => {
       state.deletedValue = action.payload;
     },
+    toggleAnnotation: (state) => {
+      const currentEnabled = state.chartOptions.annotations?.axesButtons?.enabled;
+      state.chartOptions.annotations = {
+        enabled: true,
+        axesButtons: {
+          axes: 'xy',
+          enabled: !currentEnabled,
+        },
+        toolbar: !currentEnabled
+          ? {
+              buttons: [
+                {
+                  icon: 'horizontal-line-drawing',
+                  value: 'line-menu',
+                },
+                {
+                  icon: 'delete',
+                  value: 'clear',
+                },
+              ],
+            }
+          : {
+              buttons: [],
+            },
+      };
+    },
   },
 });
 
-export const { updateSeries, updateAxis, updateData, updateDeletedValue } = chartSlice.actions;
+export const { updateSeries, updateAxis, updateData, updateDeletedValue, toggleAnnotation } =
+  chartSlice.actions;
 export default chartSlice.reducer;

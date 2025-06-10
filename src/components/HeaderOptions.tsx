@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { toggleEditor, toggleSeriesShift } from '../entities/ui/uiSlice';
+import { toggleAnnotation } from '../entities/chart/chartSlice';
 import editIcon from '../assets/icons/edit.png';
 import shiftIcon from '../assets/icons/shift.png';
 import rulerIcon from '../assets/icons/ruler.png';
@@ -41,6 +42,9 @@ export const HeaderOptions = () => {
   const dispatch = useAppDispatch();
   const isEditorVisible = useAppSelector((state) => state.ui.isEditorVisible);
   const isSeriesShiftVisible = useAppSelector((state) => state.ui.isSeriesShiftVisible);
+  const isAnnotationEnabled = useAppSelector(
+    (state) => state.chart.chartOptions.annotations?.axesButtons?.enabled ?? false,
+  );
   const [waferInfo, setWaferInfo] = useState(false);
   const [stepInfo, setStepInfo] = useState(false);
 
@@ -57,7 +61,12 @@ export const HeaderOptions = () => {
       onClick: () => dispatch(toggleSeriesShift()),
       isActive: isSeriesShiftVisible,
     },
-    { id: 'ruler', icon: rulerIcon, onClick: () => {}, isActive: false },
+    {
+      id: 'ruler',
+      icon: rulerIcon,
+      onClick: () => dispatch(toggleAnnotation()),
+      isActive: isAnnotationEnabled,
+    },
     { id: 'download', icon: downloadIcon, onClick: () => {}, isActive: false },
     { id: 'capture', icon: captureIcon, onClick: () => {}, isActive: false },
     { id: 'erasor', icon: eraserIcon, onClick: () => {}, isActive: false },

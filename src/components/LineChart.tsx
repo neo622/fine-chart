@@ -1,5 +1,5 @@
 import { AgCharts } from 'ag-charts-react';
-import type { AgChartOptions } from 'ag-charts-community';
+import type { AgChartOptions } from 'ag-charts-enterprise';
 import 'ag-charts-enterprise';
 
 import { useChartOptions } from '../entities/chart/chartHooks';
@@ -15,6 +15,7 @@ export const LineChart = () => {
     tooltip: chart.tooltip,
     animation: chart.animation,
     zoom: chart.zoom,
+    annotations: chart.annotations,
   };
 
   return <AgCharts options={chartOptions} style={{ width: '100%', height: '100%' }} />;

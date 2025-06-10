@@ -27,7 +27,7 @@ export const AxisEditor = () => {
 
   const [axisConfig, setAxisConfig] = useState<AxisConfig>({
     left: {
-      isAutomation: true,
+      isAutomation: leftAxesOption?.min || leftAxesOption?.max ? false : true,
       min: leftAxesOption?.min ?? '',
       max: leftAxesOption?.max ?? '',
       interval: '',
@@ -36,7 +36,7 @@ export const AxisEditor = () => {
       gridColor: '#e0e0e0',
     },
     right: {
-      isAutomation: true,
+      isAutomation: rightAxesOption?.min || rightAxesOption?.max ? false : true,
       min: rightAxesOption?.min ?? '',
       max: rightAxesOption?.max ?? '',
       interval: '',
@@ -374,8 +374,8 @@ const colorPickerContainerStyle = {
 };
 
 const colorPreviewStyle = {
-  width: '30px',
-  height: '30px',
+  width: '20px',
+  height: '20px',
   border: '1px solid #e0e0e0',
   borderRadius: '4px',
   cursor: 'pointer',
