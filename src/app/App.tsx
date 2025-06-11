@@ -5,6 +5,7 @@ import { Editor } from '../components/Editor';
 import { SeriesShift } from '../features/series-shift/SeriesShift';
 import { HeaderOptions } from '../components/HeaderOptions';
 import { useAppSelector } from './hooks';
+import { FooterOptions } from '../components/FooterOptions';
 
 function App() {
   const isEditorVisible = useAppSelector((state) => state.ui.isEditorVisible);
@@ -21,6 +22,9 @@ function App() {
           <div className={chartContainerStyle}>
             <div className={cx(chartStyle, !isLegendVisible && chartStyleFull)}>
               <LineChart />
+            </div>
+            <div className={headerStyle}>
+              <FooterOptions />
             </div>
             <div className={cx(legendStyle, !isLegendVisible && legendStyleHidden)}>
               {isLegendVisible && <LegendTable />}

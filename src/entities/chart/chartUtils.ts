@@ -36,7 +36,7 @@ export const createTooltip = (dispatch: AppDispatch, chartOptions: AgCartesianCh
         },
         y: yValue + 10,
       },
-      text: `${yValue}`,
+      text: `${xValue} + ${yValue}`,
       fontSize: 12,
     };
     const currentTooltip = chartOptions.initialState?.annotations ?? [];

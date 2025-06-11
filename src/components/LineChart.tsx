@@ -5,7 +5,7 @@ import 'ag-charts-enterprise';
 import { useChartOptions } from '../entities/chart/chartHooks';
 import { useAppDispatch } from '../app/hooks';
 import { createTooltip } from '../entities/chart/chartUtils';
-import type { AgCartesianChartOptions } from 'ag-charts-community';
+// import type { AgCartesianChartOptions } from 'ag-charts-community';
 import { useRef } from 'react';
 
 export const LineChart = () => {
@@ -28,18 +28,18 @@ export const LineChart = () => {
     series: seriesWithListener,
   };
 
-  const logCurrentChart = () => {
-    const chartInstance = chartRef.current?.chart;
-    if (chartInstance) {
-      const annotations = chartInstance.annotations.annotationData;
-      console.log(chartInstance);
-      console.log(annotations);
-    }
-  };
+  // const logCurrentChart = () => {
+  //   const chartInstance = chartRef.current?.chart;
+  //   if (chartInstance) {
+  //     const annotations = chartInstance.annotations.annotations._nodes;
+  //     console.log(chartInstance.addAnnotation);
+  //     console.log(annotations);
+  //   }
+  // };
 
   return (
     <>
-      <button onClick={logCurrentChart}>ddd</button>
+      {/* <button onClick={logCurrentChart}>ddd</button> */}
       <AgCharts ref={chartRef} options={chartOptions} style={{ width: '100%', height: '100%' }} />
     </>
   );
