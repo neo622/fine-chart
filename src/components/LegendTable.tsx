@@ -25,9 +25,6 @@ export const LegendTable = () => {
                 <span className={colorDotStyle(s.color)} />
                 {s.name}
               </td>
-              <td className={tdStyle}>-</td>
-              <td className={tdStyle}>-</td>
-              <td className={tdStyle}>-</td>
             </tr>
           ))}
         </tbody>

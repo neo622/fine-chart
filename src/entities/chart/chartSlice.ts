@@ -23,7 +23,7 @@ const initialState: ChartState = {
         yName: '시리즈 1',
         stroke: '#2196F3',
         strokeWidth: 1,
-        marker: { enabled: false },
+        marker: { enabled: true },
       },
       {
         type: 'line',
@@ -32,7 +32,7 @@ const initialState: ChartState = {
         yName: '시리즈 2',
         stroke: '#4CAF50',
         strokeWidth: 1,
-        marker: { enabled: false },
+        marker: { enabled: true },
       },
       {
         type: 'line',
@@ -41,7 +41,7 @@ const initialState: ChartState = {
         yName: '시리즈 3',
         stroke: '#FFC107',
         strokeWidth: 1,
-        marker: { enabled: false },
+        marker: { enabled: true },
       },
     ],
     axes: [
@@ -106,6 +106,9 @@ const initialState: ChartState = {
         buttons: [],
       },
     },
+    initialState: {
+      annotations: [],
+    },
   },
   deletedValue: {},
   originData: traceChartData,
@@ -141,6 +144,12 @@ const chartSlice = createSlice({
     updateDeletedValue: (state, action: PayloadAction<ChartState['deletedValue']>) => {
       state.deletedValue = action.payload;
     },
+    updateTooltip: (state, action: PayloadAction<any>) => {
+      if (!state.chartOptions.initialState) {
+        state.chartOptions.initialState = {};
+      }
+      state.chartOptions.initialState.annotations = action.payload;
+    },
     toggleAnnotation: (state) => {
       const currentEnabled = state.chartOptions.annotations?.axesButtons?.enabled;
       state.chartOptions.annotations = {
@@ -170,6 +179,12 @@ const chartSlice = createSlice({
   },
 });
 
-export const { updateSeries, updateAxis, updateData, updateDeletedValue, toggleAnnotation } =
-  chartSlice.actions;
+export const {
+  updateSeries,
+  updateAxis,
+  updateData,
+  updateDeletedValue,
+  updateTooltip,
+  toggleAnnotation,
+} = chartSlice.actions;
 export default chartSlice.reducer;
