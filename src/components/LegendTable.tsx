@@ -1,11 +1,20 @@
 import { css } from '@emotion/css';
+import { useAppDispatch } from '../app/hooks';
+import { useChartOptions } from '../entities/chart/chartHooks';
+import { updateSeries } from '../entities/chart/chartSlice';
 
 export const LegendTable = () => {
-  const series = [
-    { name: '시리즈 1', color: '#2196F3' },
-    { name: '시리즈 2', color: '#4CAF50' },
-    { name: '시리즈 3', color: '#FFC107' },
-  ];
+  const dispatch = useAppDispatch();
+  const chartOptions = useChartOptions();
+  const series = chartOptions.series || [];
+  console.log(series);
+
+  const handleToggleSeries = (yName: string, currentVisible: boolean) => {
+    const idx = series.findIndex((s: any) => s.yName === yName);
+    if (idx !== -1) {
+      dispatch(updateSeries({ index: idx, newSeries: { visible: !currentVisible } }));
+    }
+  };
 
   return (
     <div className={tableContainerStyle}>
@@ -19,11 +28,19 @@ export const LegendTable = () => {
           </tr>
         </thead> */}
         <tbody>
-          {series.map((s) => (
-            <tr key={s.name}>
+          {series.map((s: any) => (
+            <tr key={s.yName}>
+              <td className={tdStyle} style={{ width: 32, textAlign: 'center' }}>
+                <input
+                  type='checkbox'
+                  checked={s.visible}
+                  onChange={() => handleToggleSeries(s.yName, s.visible)}
+                  style={{ accentColor: s.stroke, width: 18, height: 18, cursor: 'pointer' }}
+                />
+              </td>
               <td className={tdStyle}>
-                <span className={colorDotStyle(s.color)} />
-                {s.name}
+                <span className={colorDotStyle(s.stroke)} />
+                {s.yName}
               </td>
             </tr>
           ))}

@@ -17,6 +17,7 @@ const initialState: ChartState = {
     series: [
       // 임시
       {
+        visible: true,
         type: 'line',
         xKey: 'timestamp',
         yKey: 'series1',
@@ -26,6 +27,7 @@ const initialState: ChartState = {
         marker: { enabled: true },
       },
       {
+        visible: true,
         type: 'line',
         xKey: 'timestamp',
         yKey: 'series2',
@@ -35,6 +37,7 @@ const initialState: ChartState = {
         marker: { enabled: true },
       },
       {
+        visible: true,
         type: 'line',
         xKey: 'timestamp',
         yKey: 'series3',

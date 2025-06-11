@@ -1,4 +1,4 @@
-import { css } from '@emotion/css';
+import { css, cx } from '@emotion/css';
 import { LineChart } from '../components/LineChart';
 import { LegendTable } from '../components/LegendTable';
 import { Editor } from '../components/Editor';
@@ -9,6 +9,7 @@ import { useAppSelector } from './hooks';
 function App() {
   const isEditorVisible = useAppSelector((state) => state.ui.isEditorVisible);
   const isSeriesShiftVisible = useAppSelector((state) => state.ui.isSeriesShiftVisible);
+  const isLegendVisible = useAppSelector((state) => state.legend.isVisible);
 
   return (
     <div className={wrapper}>
@@ -18,11 +19,11 @@ function App() {
             <HeaderOptions />
           </div>
           <div className={chartContainerStyle}>
-            <div className={chartStyle}>
+            <div className={cx(chartStyle, !isLegendVisible && chartStyleFull)}>
               <LineChart />
             </div>
-            <div className={legendStyle}>
-              <LegendTable />
+            <div className={cx(legendStyle, !isLegendVisible && legendStyleHidden)}>
+              {isLegendVisible && <LegendTable />}
             </div>
           </div>
         </div>
@@ -80,10 +81,22 @@ const chartStyle = css`
   min-height: 0;
 `;
 
+const chartStyleFull = css`
+  flex: 4;
+`;
+
 const legendStyle = css`
   flex: 1;
   background: white;
   min-height: 0;
+`;
+
+const legendStyleHidden = css`
+  flex: 0;
+  height: 0;
+  padding: 0;
+  border: none;
+  overflow: hidden;
 `;
 
 const editorStyle = css`

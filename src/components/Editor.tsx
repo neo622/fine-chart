@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { AssignAxis } from '../features/assign-axis/AssignAxis';
 import { AxisEditor } from '../features/axis-editor/AxisEditor';
 import { SeriesEditor } from '../features/series-editor/SeriesEditor';
+import { LegendEditor } from '../features/legend-editor/LegendEditor';
 
 type TabType = 'axis' | 'legend' | 'series';
 
@@ -19,7 +20,7 @@ export const Editor = () => {
       case 'axis':
         return <AxisEditor />;
       case 'legend':
-        return <div style={placeholderStyle}>준비중입니다.</div>;
+        return <LegendEditor />;
       case 'series':
         return <SeriesEditor />;
       default:
@@ -123,14 +124,4 @@ const editorContainerStyle = {
   width: '80%',
   height: 'calc(80% - 60px)',
   backgroundColor: 'white',
-};
-
-const placeholderStyle = {
-  width: '100%',
-  height: '100%',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  color: '#666',
-  fontSize: '16px',
 };
