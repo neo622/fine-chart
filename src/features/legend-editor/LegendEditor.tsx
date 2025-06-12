@@ -1,13 +1,23 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { toggleShowLegend } from '../../entities/legend/legendSlice';
+import { toggleShowLegend, updateLegendValue } from '../../entities/legend/legendSlice';
+import { fieldOrder } from './constant';
 
 export const LegendEditor = () => {
   const dispatch = useAppDispatch();
   const isVisible = useAppSelector((state) => state.legend.isVisible);
+  const value = useAppSelector((state) => state.legend.value);
 
   const handleShowLegendChange = () => {
     dispatch(toggleShowLegend());
+  };
+
+  const handleCheckboxChange = (key: keyof typeof value) => {
+    dispatch(
+      updateLegendValue({
+        newValue: { ...value, [key]: !value[key] },
+      }),
+    );
   };
 
   return (
@@ -26,24 +36,17 @@ export const LegendEditor = () => {
       <div style={valueBoxStyle}>
         <div style={valueTitleStyle}>Value</div>
         <div style={valueGridStyle}>
-          <label style={valueLabelStyle}>
-            <input type='checkbox' style={checkboxStyle} defaultChecked /> Equipment
-          </label>
-          <label style={valueLabelStyle}>
-            <input type='checkbox' style={checkboxStyle} defaultChecked /> LOTID
-          </label>
-          <label style={valueLabelStyle}>
-            <input type='checkbox' style={checkboxStyle} defaultChecked /> Module
-          </label>
-          <label style={valueLabelStyle}>
-            <input type='checkbox' style={checkboxStyle} defaultChecked /> Recipe
-          </label>
-          <label style={valueLabelStyle}>
-            <input type='checkbox' style={checkboxStyle} defaultChecked /> Parameter
-          </label>
-          <label style={valueLabelStyle}>
-            <input type='checkbox' style={checkboxStyle} defaultChecked /> Wafer
-          </label>
+          {fieldOrder.map((field) => (
+            <label key={field} style={valueLabelStyle}>
+              <input
+                type='checkbox'
+                style={checkboxStyle}
+                checked={value[field as keyof typeof value]}
+                onChange={() => handleCheckboxChange(field as keyof typeof value)}
+              />{' '}
+              {field}
+            </label>
+          ))}
         </div>
       </div>
     </div>

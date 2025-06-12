@@ -1,19 +1,30 @@
 import { css } from '@emotion/css';
-import { useAppDispatch } from '../app/hooks';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { useChartOptions } from '../entities/chart/chartHooks';
 import { updateSeries } from '../entities/chart/chartSlice';
+import { fieldOrder } from '../features/legend-editor/constant';
 
 export const LegendTable = () => {
   const dispatch = useAppDispatch();
   const chartOptions = useChartOptions();
   const series = chartOptions.series || [];
-  console.log(series);
+  const legendValue = useAppSelector((state) => state.legend.value);
 
   const handleToggleSeries = (yName: string, currentVisible: boolean) => {
     const idx = series.findIndex((s: any) => s.yName === yName);
     if (idx !== -1) {
       dispatch(updateSeries({ index: idx, newSeries: { visible: !currentVisible } }));
     }
+  };
+
+  // yName을 가공하는 함수
+  const getDisplayName = (yName: string) => {
+    const parts = yName.split(' | ');
+    // 체크된 항목만 join
+    return fieldOrder
+      .map((field, idx) => (legendValue[field as keyof typeof legendValue] ? parts[idx] : null))
+      .filter(Boolean)
+      .join(' | ');
   };
 
   return (
@@ -40,7 +51,7 @@ export const LegendTable = () => {
               </td>
               <td className={tdStyle}>
                 <span className={colorDotStyle(s.stroke)} />
-                {s.yName}
+                <span>{getDisplayName(s.yName)}</span>
               </td>
             </tr>
           ))}

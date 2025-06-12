@@ -6,6 +6,7 @@ type ApiResponse = {
   lotid: string;
   module: string;
   parameter: string;
+  recipe: string;
   data: {
     time: number[]; // UNIX timestamp
     value: (string | null)[];
@@ -76,10 +77,9 @@ export const processData = (apiData: ApiResponse): ProcessedChartResult => {
   const firstTimeArray = apiData[0].data.time;
   const length = firstTimeArray.length;
 
-  // 1. 시리즈 키 목록
-  const seriesKeys = apiData.map((seriesObj) => `${seriesObj.parameter}`);
+  console.log('API DATA', apiData);
 
-  // 2. 데이터 배열 초기화
+  // 데이터 배열 초기화
   const data: ChartDataPoint[] = firstTimeArray.map((timestamp, i) => {
     const row: ChartDataPoint = { timestamp }; // timestamp 그대로 number
     apiData.forEach((seriesObj) => {
@@ -90,13 +90,19 @@ export const processData = (apiData: ApiResponse): ProcessedChartResult => {
     return row;
   });
 
-  // 3. 시리즈 배열 구성
-  const series = seriesKeys.map((key, i) => ({
+  // 시리즈 배열 및 키 구성
+  const series = apiData.map((seriesObj, i) => ({
     visible: true,
     type: 'line',
     xKey: 'timestamp',
-    yKey: key,
-    yName: key,
+    yKey: `${seriesObj.parameter}`,
+    yName: [
+      seriesObj.equipment,
+      seriesObj.lotid,
+      seriesObj.module,
+      seriesObj.recipe,
+      seriesObj.parameter,
+    ].join(' | '),
     stroke: getSeriesColor(i),
     strokeWidth: 1,
     marker: { enabled: false },
