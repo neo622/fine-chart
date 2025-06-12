@@ -3,7 +3,6 @@ import type { AppDispatch } from '../../app/store';
 import { updateTooltip } from './chartSlice';
 
 interface ClickedTooltip {
-  id: string;
   type: string;
   start: { [key: string]: any };
   end: { [key: string]: any };
@@ -18,7 +17,6 @@ export const createTooltip = (dispatch: AppDispatch, chartOptions: AgCartesianCh
     const yValue = datum[yKey];
     console.log('ey', xValue, yValue);
     const tooltipData: ClickedTooltip = {
-      id: 'asdasd',
       type: 'callout',
       start: {
         x: {
@@ -39,7 +37,11 @@ export const createTooltip = (dispatch: AppDispatch, chartOptions: AgCartesianCh
       text: `${xValue} + ${yValue}`,
       fontSize: 12,
     };
+
     const currentTooltip = chartOptions.initialState?.annotations ?? [];
-    dispatch(updateTooltip([...currentTooltip, tooltipData]));
+    const isDuplicate = currentTooltip.some((tooltip: any) => tooltip.text === String(yValue));
+    if (!isDuplicate) {
+      dispatch(updateTooltip([...currentTooltip, tooltipData]));
+    }
   };
 };

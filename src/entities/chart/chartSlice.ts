@@ -108,6 +108,9 @@ const initialState: ChartState = {
       toolbar: {
         buttons: [],
       },
+      optionsToolbar: {
+        enabled: false,
+      },
     },
     initialState: {
       annotations: [],
