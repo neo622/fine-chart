@@ -5,6 +5,7 @@ interface UiState {
   isEditorVisible: boolean;
   isSeriesShiftVisible: boolean;
   isBoxPlotVisible: boolean;
+  isWtwChartVisible: boolean;
 }
 
 const initialState: UiState = {
@@ -12,6 +13,7 @@ const initialState: UiState = {
   isEditorVisible: false,
   isSeriesShiftVisible: false,
   isBoxPlotVisible: false,
+  isWtwChartVisible: false,
 };
 
 const uiSlice = createSlice({
@@ -38,8 +40,12 @@ const uiSlice = createSlice({
     toggleBoxPlot: (state) => {
       state.isBoxPlotVisible = !state.isBoxPlotVisible;
     },
+    toggleWtwChart: (state) => {
+      state.isWtwChartVisible = !state.isWtwChartVisible;
+    },
   },
 });
 
-export const { toggleLoading, toggleEditor, toggleSeriesShift, toggleBoxPlot } = uiSlice.actions;
+export const { toggleEditor, toggleSeriesShift, toggleBoxPlot, toggleLoading, toggleWtwChart } =
+  uiSlice.actions;
 export default uiSlice.reducer;

@@ -4,29 +4,31 @@ import type { AgChartOptions } from 'ag-charts-enterprise';
 import 'ag-charts-enterprise';
 
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { loadLineChart, setTraceData } from '../entities/chart/chartSlice';
 import { useChartOptions } from '../entities/chart/chartHooks';
 import { createTooltip } from '../entities/chart/chartUtils';
 import { toggleLoading } from '../entities/ui/uiSlice';
-import { fetchTraceData } from '../features/backend-actions/LoadTraceData';
+import { loadWtwChart } from '../entities/chart/chartSlice';
+import { fetchWtwData } from '../features/backend-actions/LoadWtwData';
 
-export const LineChart = () => {
+export const LineChartWtW = () => {
   const chartRef = useRef<any>(null);
   const chart = useChartOptions();
   const dispatch = useAppDispatch();
-  const traceData = useAppSelector((state) => state.chart.traceData);
+  const wtwData = useAppSelector((state) => state.chart.wtwData);
 
   useEffect(() => {
     const load = async () => {
       dispatch(toggleLoading(true));
-      console.log('traceData', traceData);
-      if (traceData.data.length === 0) {
-        const data = await fetchTraceData();
+      console.log('wtwData', wtwData);
+      if (wtwData.data.length === 0) {
+        const data: any = await fetchWtwData();
+        // const tmp_chart_data: any = { data, series, axes };
         if (data) {
-          dispatch(loadLineChart(data));
+          dispatch(loadWtwChart(data));
         }
+        console.log('good?', data);
       } else {
-        dispatch(loadLineChart(traceData));
+        dispatch(loadWtwChart(wtwData));
       }
 
       dispatch(toggleLoading(false));
@@ -47,20 +49,12 @@ export const LineChart = () => {
     ...chart,
     //@ts-ignore
     series: seriesWithListener,
-    data: traceData.data,
+    data: wtwData.data,
   };
-
-  // const logCurrentChart = () => {
-  //   const chartInstance = chartRef.current?.chart;
-  //   if (chartInstance) {
-  //     const annotations = chartInstance.annotations.annotations._nodes;
-  //     console.log(chartInstance.addAnnotation);
-  //     console.log(annotations);
-  //   }
-  // };
 
   return (
     <>
+      {/* <button onClick={() => console.log(chart)}>ddd</button> */}
       <AgCharts ref={chartRef} options={chartOptions} style={{ width: '100%', height: '100%' }} />
     </>
   );

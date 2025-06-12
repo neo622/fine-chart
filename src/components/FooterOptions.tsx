@@ -1,7 +1,7 @@
 import wtwIcon from '../assets/icons/wtw.png';
 import editIcon from '../assets/icons/edit.png';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { toggleBoxPlot } from '../entities/ui/uiSlice';
+import { toggleBoxPlot, toggleWtwChart } from '../entities/ui/uiSlice';
 
 interface ButtonProps {
   icon: string;
@@ -35,9 +35,15 @@ const IconButton = ({ icon, isActive, onClick }: ButtonProps) => {
 export const FooterOptions = () => {
   const dispatch = useAppDispatch();
   const isBoxPlotVisible = useAppSelector((state) => state.ui.isBoxPlotVisible);
+  const isWtwChartVisible = useAppSelector((state) => state.ui.isWtwChartVisible);
 
   const buttons = [
-    { id: 'wtw', icon: wtwIcon, onClick: () => {}, isActive: false },
+    {
+      id: 'wtw',
+      icon: wtwIcon,
+      onClick: () => dispatch(toggleWtwChart()),
+      isActive: isWtwChartVisible,
+    },
     {
       id: 'edit',
       icon: editIcon,

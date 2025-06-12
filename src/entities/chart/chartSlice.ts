@@ -1,23 +1,24 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import { generateTestData } from '../../shared/utils/MockData';
 import type { AgCartesianChartOptions, AgChartOptions } from 'ag-charts-enterprise';
 import type { ChartData } from './types';
 
 interface ChartState {
+  traceData: any;
+  wtwData: any;
   chartOptions: AgCartesianChartOptions;
   deletedValue: { [key: string]: any };
   originData: any[];
 }
 
-const traceChartData: ChartData = generateTestData(); //API 로직 타기
+// const traceChartData: ChartData = generateTestData(); //API 로직 타기
 
 const initialState: ChartState = {
+  traceData: { data: [], series: [], axes: [] },
+  wtwData: { data: [], series: [], axes: [] },
   chartOptions: {
-    // width: 1000,
-    // height: 400,
     navigator: {
-      enabled: true,
+      enabled: false,
     },
     data: [],
     series: [],
@@ -32,7 +33,7 @@ const initialState: ChartState = {
       {
         type: 'number',
         position: 'left',
-        keys: ['TM_Bara_Press_read', 'LL2_N2Flow_Switch_Monitor'],
+        keys: [],
         min: undefined,
         max: undefined,
         interval: { step: undefined },
@@ -49,7 +50,7 @@ const initialState: ChartState = {
       },
     ],
     legend: {
-      enabled: true,
+      enabled: false,
       // position: 'bottom',
     },
     padding: {
@@ -98,10 +99,27 @@ const chartSlice = createSlice({
   name: 'chart',
   initialState,
   reducers: {
-    loadLineChart: (state, action: PayloadAction<{ data: ChartData; series: any }>) => {
+    loadLineChart: (state, action: PayloadAction<{ data: ChartData; series: any; axes: any }>) => {
+      state.traceData = action.payload;
       state.chartOptions.data = action.payload.data;
       state.chartOptions.series = action.payload.series;
+      state.chartOptions.axes = action.payload.axes;
       state.originData = action.payload.data;
+    },
+    loadWtwChart: (state, action: PayloadAction<{ data: ChartData; series: any; axes: any }>) => {
+      state.wtwData = action.payload;
+      state.chartOptions.data = action.payload.data;
+      state.chartOptions.series = action.payload.series;
+      state.chartOptions.axes = action.payload.axes;
+      state.originData = action.payload.data;
+    },
+    setTraceData: (state, action: PayloadAction<ChartData>) => {
+      state.traceData = action.payload;
+      state.chartOptions.data = action.payload;
+    },
+    setWtwData: (state, action: PayloadAction<any>) => {
+      state.traceData = action.payload;
+      state.chartOptions.data = action.payload;
     },
     updateAxis: (state, action: PayloadAction<any>) => {
       state.chartOptions.axes = action.payload;
@@ -166,11 +184,14 @@ const chartSlice = createSlice({
 
 export const {
   loadLineChart,
+  loadWtwChart,
   updateSeries,
   updateAxis,
   updateData,
   updateDeletedValue,
   updateTooltip,
   toggleAnnotation,
+  setTraceData,
+  setWtwData,
 } = chartSlice.actions;
 export default chartSlice.reducer;

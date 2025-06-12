@@ -1,5 +1,6 @@
 import { css, cx } from '@emotion/css';
 import { LineChart } from '../components/LineChart';
+import { LineChartWtW } from '../components/LineChartWtW';
 import { LegendTable } from '../components/LegendTable';
 import { Editor } from '../components/Editor';
 import { SeriesShift } from '../features/series-shift/SeriesShift';
@@ -13,6 +14,13 @@ function App() {
   const isSeriesShiftVisible = useAppSelector((state) => state.ui.isSeriesShiftVisible);
   const isLegendVisible = useAppSelector((state) => state.legend.isVisible);
   const isBoxPlotVisible = useAppSelector((state) => state.ui.isBoxPlotVisible);
+  const isWtwChartVisible = useAppSelector((state) => state.ui.isWtwChartVisible);
+
+  const renderChart = () => {
+    if (isWtwChartVisible) return <LineChartWtW />;
+    if (isBoxPlotVisible) return <BoxPlotChart />;
+    return <LineChart />;
+  };
 
   return (
     <div className={wrapper}>
@@ -23,7 +31,7 @@ function App() {
           </div>
           <div className={chartContainerStyle}>
             <div className={cx(chartStyle, !isLegendVisible && chartStyleFull)}>
-              {isBoxPlotVisible ? <BoxPlotChart /> : <LineChart />}
+              {renderChart()}
             </div>
             <div className={headerStyle}>
               <FooterOptions />
