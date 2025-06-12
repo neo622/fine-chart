@@ -13,7 +13,7 @@ type ApiResponse = {
 }[];
 
 type ChartDataPoint = {
-  timestamp: Date;
+  timestamp: Date | number;
   [seriesKey: string]: any;
 };
 
@@ -31,15 +31,36 @@ const payload: any = {
   info: [
     {
       id: 0,
-      module: 'PM3',
-      parameter: 'APC_Pressure',
+      module: 'TM',
+      parameter: 'TM_Bara_Press_read',
       wafer: ['1', '2'],
-      step: ['1', '2', '3', '4', '5'],
+      step: [],
     },
+    // {
+    //   id: 1,
+    //   module: 'PM3',
+    //   parameter: 'APC_Pressure',
+    //   wafer: ['1', '2'],
+    //   step: ['1', '2', '3', '4', '5'],
+    // },
+    // {
+    //   id: 1,
+    //   module: 'PM3',
+    //   parameter: 'Gas1_Monitor',
+    //   wafer: ['1', '2'],
+    //   step: ['1', '2', '3', '4', '5'],
+    // },
+    // {
+    //   id: 2,
+    //   module: 'PM3',
+    //   parameter: 'Gas2_Monitor',
+    //   wafer: ['1', '2'],
+    //   step: ['1', '2', '3', '4', '5'],
+    // },
     {
       id: 1,
       module: 'TM',
-      parameter: 'LL1_Pira_Press_Read',
+      parameter: 'LL2_N2Flow_Switch_Monitor',
       wafer: ['1', '2'],
       step: [],
     },
@@ -52,48 +73,36 @@ export const processData = (apiData: ApiResponse): ProcessedChartResult => {
     return { data: [], series: [] };
   }
 
-  const resultMap: Map<number, ChartDataPoint> = new Map();
-  const seriesList: string[] = [];
+  const firstTimeArray = apiData[0].data.time;
+  const length = firstTimeArray.length;
 
-  apiData.forEach((seriesObj) => {
-    const { equipment, lotid, module, parameter, data } = seriesObj;
-    const { time, value } = data;
+  // 1. 시리즈 키 목록
+  const seriesKeys = apiData.map((seriesObj) => `${seriesObj.parameter}`);
 
-    // const seriesKey = `${lotid}__${module}__${parameter}`;
-    const seriesKey = `${parameter}`;
-    seriesList.push(seriesKey);
-
-    for (let i = 0; i < time.length; i++) {
-      const timestamp = time[i];
-      const val = value[i];
-
-      if (!resultMap.has(timestamp)) {
-        resultMap.set(timestamp, {
-          timestamp: new Date(timestamp),
-        });
-      }
-
-      const row = resultMap.get(timestamp)!;
-      row[seriesKey] = val !== null ? parseFloat(val) : null;
-    }
+  // 2. 데이터 배열 초기화
+  const data: ChartDataPoint[] = firstTimeArray.map((timestamp, i) => {
+    const row: ChartDataPoint = { timestamp }; // timestamp 그대로 number
+    apiData.forEach((seriesObj) => {
+      const key = `${seriesObj.parameter}`;
+      const val = seriesObj.data.value[i];
+      row[key] = val !== null ? parseFloat(val) : null;
+    });
+    return row;
   });
 
-  const data = Array.from(resultMap.values()).sort(
-    (a, b) => a.timestamp.getTime() - b.timestamp.getTime(),
-  );
-
-  // 시리즈 구성
-  const series = seriesList.map((key, i) => ({
+  // 3. 시리즈 배열 구성
+  const series = seriesKeys.map((key, i) => ({
     visible: true,
     type: 'line',
     xKey: 'timestamp',
     yKey: key,
-    yName: key, // 필요시 가공
-    stroke: '#2196F3',
-    strokeWidth: 5,
+    yName: key,
+    stroke: getSeriesColor(i),
+    strokeWidth: 1,
     marker: { enabled: false },
+    connectMissingData: true,
   }));
-  console.log('daaaaamn', data, series);
+
   return { data, series };
 };
 
