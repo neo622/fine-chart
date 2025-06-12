@@ -14,40 +14,13 @@ const traceChartData: ChartData = generateTestData(); //API 로직 타기
 
 const initialState: ChartState = {
   chartOptions: {
-    data: traceChartData,
-    series: [
-      // 임시
-      {
-        visible: true,
-        type: 'line',
-        xKey: 'timestamp',
-        yKey: 'series1',
-        yName: '시리즈 1',
-        stroke: '#2196F3',
-        strokeWidth: 1,
-        marker: { enabled: true },
-      },
-      {
-        visible: true,
-        type: 'line',
-        xKey: 'timestamp',
-        yKey: 'series2',
-        yName: '시리즈 2',
-        stroke: '#4CAF50',
-        strokeWidth: 1,
-        marker: { enabled: true },
-      },
-      {
-        visible: true,
-        type: 'line',
-        xKey: 'timestamp',
-        yKey: 'series3',
-        yName: '시리즈 3',
-        stroke: '#FFC107',
-        strokeWidth: 1,
-        marker: { enabled: true },
-      },
-    ],
+    // width: 1000,
+    // height: 400,
+    navigator: {
+      enabled: true,
+    },
+    data: [],
+    series: [],
     axes: [
       {
         type: 'time',
@@ -59,24 +32,24 @@ const initialState: ChartState = {
       {
         type: 'number',
         position: 'left',
-        keys: ['series1', 'series2', 'series3'],
-        min: undefined,
-        max: undefined,
+        keys: ['APC_Pressure'],
+        min: 0,
+        max: 10000,
         interval: { step: undefined },
         label: { fontWeight: undefined, fontSize: undefined, color: undefined },
       },
       {
         type: 'number',
         position: 'right',
-        keys: [],
-        min: undefined,
-        max: undefined,
+        keys: ['LL1_Pira_Press_Read'],
+        min: 200000,
+        max: 1000000,
         interval: { step: undefined },
         label: { fontWeight: undefined, fontSize: undefined, color: undefined },
       },
     ],
     legend: {
-      enabled: false,
+      enabled: true,
       // position: 'bottom',
     },
     padding: {
@@ -118,13 +91,18 @@ const initialState: ChartState = {
     },
   },
   deletedValue: {},
-  originData: traceChartData,
+  originData: [],
 };
 
 const chartSlice = createSlice({
   name: 'chart',
   initialState,
   reducers: {
+    loadLineChart: (state, action: PayloadAction<{ data: ChartData; series: any }>) => {
+      state.chartOptions.data = action.payload.data;
+      state.chartOptions.series = action.payload.series;
+      state.originData = action.payload.data;
+    },
     updateAxis: (state, action: PayloadAction<any>) => {
       state.chartOptions.axes = action.payload;
     },
@@ -187,6 +165,7 @@ const chartSlice = createSlice({
 });
 
 export const {
+  loadLineChart,
   updateSeries,
   updateAxis,
   updateData,

@@ -4,7 +4,7 @@ import type { AgChartOptions } from 'ag-charts-enterprise';
 import 'ag-charts-enterprise';
 
 import { useAppDispatch } from '../app/hooks';
-import { updateData } from '../entities/chart/chartSlice';
+import { loadLineChart } from '../entities/chart/chartSlice';
 import { useChartOptions } from '../entities/chart/chartHooks';
 import { createTooltip } from '../entities/chart/chartUtils';
 import { toggleLoading } from '../entities/ui/uiSlice';
@@ -20,8 +20,7 @@ export const LineChart = () => {
       dispatch(toggleLoading(true));
       const data = await fetchTraceData();
       if (data) {
-        // dispatch(updateData(data));
-        // console.log('차트 데이터', data);
+        dispatch(loadLineChart(data));
       }
       dispatch(toggleLoading(false));
     };
@@ -54,8 +53,8 @@ export const LineChart = () => {
 
   return (
     <>
-      {/* <button onClick={logCurrentChart}>ddd</button> */}
-      <AgCharts ref={chartRef} options={chartOptions} style={{ width: '100%', height: '100%' }} />
+      <button onClick={() => console.log(chart)}>ddd</button>
+      <AgCharts ref={chartRef} options={chartOptions} style={{ width: '90%', height: '100%' }} />
     </>
   );
 };
