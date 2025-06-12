@@ -6,11 +6,13 @@ import { SeriesShift } from '../features/series-shift/SeriesShift';
 import { HeaderOptions } from '../components/HeaderOptions';
 import { useAppSelector } from './hooks';
 import { FooterOptions } from '../components/FooterOptions';
+import { BoxPlotChart } from '../components/BoxPlotChart';
 
 function App() {
   const isEditorVisible = useAppSelector((state) => state.ui.isEditorVisible);
   const isSeriesShiftVisible = useAppSelector((state) => state.ui.isSeriesShiftVisible);
   const isLegendVisible = useAppSelector((state) => state.legend.isVisible);
+  const isBoxPlotVisible = useAppSelector((state) => state.ui.isBoxPlotVisible);
 
   return (
     <div className={wrapper}>
@@ -21,7 +23,7 @@ function App() {
           </div>
           <div className={chartContainerStyle}>
             <div className={cx(chartStyle, !isLegendVisible && chartStyleFull)}>
-              <LineChart />
+              {isBoxPlotVisible ? <BoxPlotChart /> : <LineChart />}
             </div>
             <div className={headerStyle}>
               <FooterOptions />

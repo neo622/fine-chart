@@ -1,17 +1,32 @@
+import { useEffect, useRef } from 'react';
 import { AgCharts } from 'ag-charts-react';
 import type { AgChartOptions } from 'ag-charts-enterprise';
 import 'ag-charts-enterprise';
 
-import { useChartOptions } from '../entities/chart/chartHooks';
 import { useAppDispatch } from '../app/hooks';
+import { updateData } from '../entities/chart/chartSlice';
+import { useChartOptions } from '../entities/chart/chartHooks';
 import { createTooltip } from '../entities/chart/chartUtils';
-// import type { AgCartesianChartOptions } from 'ag-charts-community';
-import { useRef } from 'react';
+import { toggleLoading } from '../entities/ui/uiSlice';
+import { fetchTraceData } from '../features/backend-actions/LoadData';
 
 export const LineChart = () => {
   const chartRef = useRef<any>(null);
   const chart = useChartOptions();
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const load = async () => {
+      dispatch(toggleLoading(true));
+      const data = await fetchTraceData();
+      if (data) {
+        // dispatch(updateData(data));
+        // console.log('차트 데이터', data);
+      }
+      dispatch(toggleLoading(false));
+    };
+    load();
+  }, []);
 
   const seriesWithListener = chart.series?.map((series) => {
     return {

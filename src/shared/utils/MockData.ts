@@ -30,3 +30,61 @@ export const generateNewTestData = () => {
   }
   return data;
 };
+
+export const generateBoxPlotData = () => {
+  return [
+    {
+      department: 'Sales',
+      min: 1052,
+      q1: 4465,
+      median: 5765,
+      q3: 8834,
+      max: 14852,
+    },
+    {
+      department: 'R&D',
+      min: 1009,
+      q1: 2741,
+      median: 4377,
+      q3: 7725,
+      max: 14814,
+    },
+    {
+      department: 'HR',
+      min: 1555,
+      q1: 2696,
+      median: 4071,
+      q3: 9756,
+      max: 19717,
+    },
+  ];
+};
+
+export const generateBoxPlotData2 = () => {
+  return [
+    {
+      department: 'Sales',
+      min: 1300,
+      q1: 4465,
+      median: 5765,
+      q3: 8834,
+      max: 15895,
+    },
+    {
+      department: 'R&D',
+      min: 1111,
+      q1: 2741,
+      median: 4377,
+      q3: 7725,
+      max: 17789,
+    },
+    {
+      department: 'HR',
+      min: 1234,
+      q1: 2696,
+      median: 4071,
+      q3: 9756,
+      max: 24571,
+    },
+  ];
+};

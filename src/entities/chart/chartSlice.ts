@@ -2,6 +2,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import { generateTestData } from '../../shared/utils/MockData';
 import type { AgCartesianChartOptions, AgChartOptions } from 'ag-charts-enterprise';
+import type { ChartData } from './types';
 
 interface ChartState {
   chartOptions: AgCartesianChartOptions;
@@ -9,7 +10,7 @@ interface ChartState {
   originData: any[];
 }
 
-const traceChartData: any[] = generateTestData(); //API 로직 타기
+const traceChartData: ChartData = generateTestData(); //API 로직 타기
 
 const initialState: ChartState = {
   chartOptions: {

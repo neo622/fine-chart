@@ -1,3 +1,9 @@
+export type ChartDataSeries = {
+  [key: string]: number | string | Date;
+};
+
+export type ChartData = ChartDataSeries[];
+
 export type ChartSeries = {
   type: 'line' | 'box';
   xKey: 'timestamp' | 'index';

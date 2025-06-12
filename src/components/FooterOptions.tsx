@@ -1,5 +1,7 @@
 import wtwIcon from '../assets/icons/wtw.png';
 import editIcon from '../assets/icons/edit.png';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { toggleBoxPlot } from '../entities/ui/uiSlice';
 
 interface ButtonProps {
   icon: string;
@@ -31,10 +33,17 @@ const IconButton = ({ icon, isActive, onClick }: ButtonProps) => {
 };
 
 export const FooterOptions = () => {
-  // 임시로 버튼 활성화 상태는 false로 고정
+  const dispatch = useAppDispatch();
+  const isBoxPlotVisible = useAppSelector((state) => state.ui.isBoxPlotVisible);
+
   const buttons = [
     { id: 'wtw', icon: wtwIcon, onClick: () => {}, isActive: false },
-    { id: 'edit', icon: editIcon, onClick: () => {}, isActive: false },
+    {
+      id: 'edit',
+      icon: editIcon,
+      onClick: () => dispatch(toggleBoxPlot()),
+      isActive: isBoxPlotVisible,
+    },
   ];
 
   return (
