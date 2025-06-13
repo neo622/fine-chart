@@ -8,6 +8,7 @@ import { HeaderOptions } from '../components/HeaderOptions';
 import { useAppSelector } from './hooks';
 import { FooterOptions } from '../components/FooterOptions';
 import { BoxPlotChart } from '../components/BoxPlotChart';
+import { useRef } from 'react';
 
 function App() {
   const isEditorVisible = useAppSelector((state) => state.ui.isEditorVisible);
@@ -16,10 +17,12 @@ function App() {
   const isBoxPlotVisible = useAppSelector((state) => state.ui.isBoxPlotVisible);
   const isWtwChartVisible = useAppSelector((state) => state.ui.isWtwChartVisible);
 
+  const chartRef = useRef<any>(null);
+
   const renderChart = () => {
-    if (isWtwChartVisible) return <LineChartWtW />;
-    if (isBoxPlotVisible) return <BoxPlotChart />;
-    return <LineChart />;
+    if (isWtwChartVisible) return <LineChartWtW ref={chartRef} />;
+    if (isBoxPlotVisible) return <BoxPlotChart ref={chartRef} />;
+    return <LineChart ref={chartRef} />;
   };
 
   return (
@@ -27,7 +30,7 @@ function App() {
       <div className={containerStyle}>
         <div className={chartAreaStyle}>
           <div className={headerStyle}>
-            <HeaderOptions />
+            <HeaderOptions chartRef={chartRef} />
           </div>
           <div className={chartContainerStyle}>
             <div className={cx(chartStyle, !isLegendVisible && chartStyleFull)}>

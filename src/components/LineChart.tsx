@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { AgCharts } from 'ag-charts-react';
 import type { AgChartOptions } from 'ag-charts-enterprise';
 import 'ag-charts-enterprise';
@@ -10,11 +10,15 @@ import { createTooltip } from '../entities/chart/chartUtils';
 import { toggleLoading } from '../entities/ui/uiSlice';
 import { fetchTraceData } from '../features/backend-actions/LoadTraceData';
 
-export const LineChart = () => {
+export const LineChart = forwardRef((props, ref) => {
   const chartRef = useRef<any>(null);
   const chart = useChartOptions();
   const dispatch = useAppDispatch();
   const traceData = useAppSelector((state) => state.chart.traceData);
+
+  useImperativeHandle(ref, () => ({
+    getChartContainer: () => chartRef.current?.chart?.container,
+  }));
 
   useEffect(() => {
     const load = async () => {
@@ -64,4 +68,4 @@ export const LineChart = () => {
       <AgCharts ref={chartRef} options={chartOptions} style={{ width: '100%', height: '100%' }} />
     </>
   );
-};
+});

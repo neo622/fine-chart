@@ -8,6 +8,7 @@ import rulerIcon from '../assets/icons/ruler.png';
 import downloadIcon from '../assets/icons/download.png';
 import captureIcon from '../assets/icons/capture.png';
 import eraserIcon from '../assets/icons/eraser.png';
+import { useCaptureImage, useDownloadExcelData } from '../features/export-data/exportHooks';
 
 interface ButtonProps {
   icon: string;
@@ -38,13 +39,17 @@ const IconButton = ({ icon, isActive, onClick }: ButtonProps) => {
   );
 };
 
-export const HeaderOptions = () => {
+export const HeaderOptions = ({ chartRef }: { chartRef: any }) => {
   const dispatch = useAppDispatch();
+  const chart = useAppSelector((state) => state.chart);
   const isEditorVisible = useAppSelector((state) => state.ui.isEditorVisible);
   const isSeriesShiftVisible = useAppSelector((state) => state.ui.isSeriesShiftVisible);
   const isAnnotationEnabled = useAppSelector(
     (state) => state.chart.chartOptions.annotations?.axesButtons?.enabled ?? false,
   );
+  const { downloadExcel } = useDownloadExcelData();
+  const { captureImage } = useCaptureImage();
+
   const [waferInfo, setWaferInfo] = useState(false);
   const [stepInfo, setStepInfo] = useState(false);
 
@@ -67,8 +72,26 @@ export const HeaderOptions = () => {
       onClick: () => dispatch(toggleAnnotation()),
       isActive: isAnnotationEnabled,
     },
-    { id: 'download', icon: downloadIcon, onClick: () => {}, isActive: false },
-    { id: 'capture', icon: captureIcon, onClick: () => {}, isActive: false },
+    {
+      id: 'download',
+      icon: downloadIcon,
+      onClick: () => {
+        if (chart.chartOptions.data) {
+          downloadExcel(chart.chartOptions?.data);
+        }
+      },
+      isActive: false,
+    },
+    {
+      id: 'capture',
+      icon: captureIcon,
+      onClick: () => {
+        if (chart.chartOptions.data) {
+          captureImage(chartRef);
+        }
+      },
+      isActive: false,
+    },
     { id: 'erasor', icon: eraserIcon, onClick: () => {}, isActive: false },
   ];
 

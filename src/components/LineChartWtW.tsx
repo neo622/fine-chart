@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { AgCharts } from 'ag-charts-react';
 import type { AgChartOptions } from 'ag-charts-enterprise';
 import 'ag-charts-enterprise';
@@ -10,11 +10,15 @@ import { toggleLoading } from '../entities/ui/uiSlice';
 import { loadWtwChart } from '../entities/chart/chartSlice';
 import { fetchWtwData } from '../features/backend-actions/LoadWtwData';
 
-export const LineChartWtW = () => {
+export const LineChartWtW = forwardRef((props, ref) => {
   const chartRef = useRef<any>(null);
   const chart = useChartOptions();
   const dispatch = useAppDispatch();
   const wtwData = useAppSelector((state) => state.chart.wtwData);
+
+  useImperativeHandle(ref, () => ({
+    getChartContainer: () => chartRef.current?.chart?.container,
+  }));
 
   useEffect(() => {
     const load = async () => {
@@ -58,4 +62,4 @@ export const LineChartWtW = () => {
       <AgCharts ref={chartRef} options={chartOptions} style={{ width: '100%', height: '100%' }} />
     </>
   );
-};
+});

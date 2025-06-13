@@ -20,6 +20,7 @@
     "ag-charts-enterprise": "^11.3.0",
     "ag-charts-react": "^11.3.0",
     "axios": "^1.9.0",
+    "exceljs": "^4.4.0",
     "immer": "^10.1.1",
     "react": "^19.1.0",
     "react-color": "^2.19.3",
