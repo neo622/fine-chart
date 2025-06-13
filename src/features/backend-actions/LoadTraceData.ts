@@ -8,6 +8,7 @@ type ApiResponse = {
   lotid: string;
   module: string;
   parameter: string;
+  recipe: string;
   data: {
     time: number[]; // UNIX timestamp
     value: (string | null)[];
@@ -34,13 +35,16 @@ export const processData = (apiData: ApiResponse): ProcessedChartResult => {
   const length = firstTimeArray.length;
 
   // 1. 시리즈 키 목록
-  const seriesKeys = apiData.map((seriesObj) => `${seriesObj.parameter}`);
+  const seriesKeys = apiData.map(
+    (seriesObj) =>
+      `${seriesObj.equipment} | ${seriesObj.lotid} | ${seriesObj.module} | ${seriesObj.recipe} | ${seriesObj.parameter}`,
+  );
 
   // 2. 데이터 배열 초기화
   const data: ChartDataPoint[] = firstTimeArray.map((timestamp, i) => {
     const row: ChartDataPoint = { timestamp }; // timestamp 그대로 number
     apiData.forEach((seriesObj) => {
-      const key = `${seriesObj.parameter}`;
+      const key = `${seriesObj.equipment} | ${seriesObj.lotid} | ${seriesObj.module} | ${seriesObj.recipe} | ${seriesObj.parameter}`;
       const val = seriesObj.data.value[i];
       row[key] = val !== null ? parseFloat(val) : null;
     });
@@ -59,7 +63,7 @@ export const processData = (apiData: ApiResponse): ProcessedChartResult => {
     marker: { enabled: false },
     connectMissingData: true,
   }));
-
+  console.log('씨씨', seriesKeys);
   // 4. Axes 구성 (left 축에 모든 시리즈 연결)
   const axes = [
     {

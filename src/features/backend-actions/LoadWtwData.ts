@@ -14,6 +14,7 @@ type WtwApiResponse = {
     recipe: string;
     step: string[];
     wafer: string;
+    parameter: string;
   };
 }[];
 
@@ -48,11 +49,14 @@ export const processWtwData = (apiData: WtwApiResponse): ProcessedChartResult =>
     const {
       data: { value },
       equipment,
+      lotid,
       module,
+      recipe,
+      parameter,
       wafer,
     } = seriesObj;
 
-    const seriesKey = `${equipment}__${module}__${paramKey}__W${wafer}`;
+    const seriesKey = `${equipment} | ${lotid} | ${module} | ${recipe} | ${parameter} | ${wafer}`;
     seriesKeys.push(seriesKey);
 
     value.forEach((v, i) => {
@@ -72,7 +76,7 @@ export const processWtwData = (apiData: WtwApiResponse): ProcessedChartResult =>
     stroke: getSeriesColor(i),
     strokeWidth: 1,
     marker: { enabled: false },
-    connectMissingValues: true,
+    connectMissingData: true,
   }));
 
   const axes = [
