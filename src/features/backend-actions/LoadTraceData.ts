@@ -1,5 +1,4 @@
 import axios from 'axios';
-import type { AgChartOptions } from 'ag-charts-enterprise';
 
 import { API_URL, payload_trace } from '../../shared/constants/constant';
 
@@ -32,7 +31,7 @@ export const processData = (apiData: ApiResponse): ProcessedChartResult => {
   }
 
   const firstTimeArray = apiData[0].data.time;
-  const length = firstTimeArray.length;
+  // const length = firstTimeArray.length;
 
   // 1. 시리즈 키 목록
   const seriesKeys = apiData.map(

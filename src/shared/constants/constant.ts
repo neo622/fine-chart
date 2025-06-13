@@ -1,6 +1,8 @@
 // 브라우저로 부터 가져와야 함
 export const API_URL: string = 'http://10.100.100.172:9002/param_chart';
 export const API_URL_WTW: string = 'http://10.100.100.172:9002/wafer_to_wafer';
+export const API_URL_BOX: string = 'http://10.100.100.172:9002/step_boxplot';
+
 export const payload_wtw: any = {
   equipment: 'PQK28708',
   lotid: '20241113081328_EPD_barer_1foup',
@@ -80,6 +82,26 @@ export const payload_trace: any = {
       parameter: 'LL2_N2Flow_Switch_Monitor',
       wafer: ['1', '2'],
       step: [],
+    },
+  ],
+};
+
+export const payload_boxplot: any = {
+  equipment: 'PQK28708',
+  lotid: '20241113081328_EPD_barer_1foup',
+  recipe: 'CTD_P3F_AR_O2N2',
+  info: [
+    {
+      module: 'PM3',
+      parameter: 'APC_Pressure',
+      wafer: ['1', '2'],
+      step: ['0', '1', '2', '3', '4', '5', '6'],
+    },
+    {
+      module: 'PM3',
+      parameter: 'SourcePwr1_Read',
+      wafer: ['3', '4'],
+      step: ['0', '1', '2', '3', '4', '5', '6'],
     },
   ],
 };

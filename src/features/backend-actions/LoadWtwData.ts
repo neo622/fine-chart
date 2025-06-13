@@ -42,7 +42,7 @@ export const processWtwData = (apiData: WtwApiResponse): ProcessedChartResult =>
   const data: ChartDataPoint[] = timeArray.map((t) => ({ timestamp: t }));
   const seriesKeys: string[] = [];
 
-  apiData.forEach((entry, idx) => {
+  apiData.forEach((entry) => {
     const paramKey = Object.keys(entry)[0];
     const seriesObj = entry[paramKey];
 
